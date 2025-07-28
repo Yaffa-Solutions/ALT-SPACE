@@ -79,3 +79,53 @@ const renderHeroSection = () => {
 
   return section;
 };
+
+const getRandomSpaceFact = () => {
+  const getRandomDate = () => {
+    const start = new Date(1995, 5, 16);
+    const end = new Date();
+    const randomTime =
+      start.getTime() + Math.random() * (end.getTime() - start.getTime());
+    return new Date(randomTime).toISOString().split('T')[0];
+  };
+
+  const date = getRandomDate();
+  const apiKey = 'DEMO_KEY';
+  const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
+      renderRandomFactSection(data);
+    } else {
+      alert('Failed to fetch space fact.');
+    }
+  };
+
+  xhr.send();
+};
+const renderRandomFactSection = (data) => {
+  const main = document.querySelector('main');
+  main.innerHTML = '';
+
+  const section = createHtmlElement('section', 'container py-5 text-white');
+
+  const title = createHtmlElement('h2', 'mb-4 display-5 fw-bold', data.title);
+  const date = createHtmlElement('p', 'text-muted', `${data.date}`);
+
+  const imageWrapper = createHtmlElement('div', 'mb-4 text-center');
+  const image = createHtmlElement('img', 'img-fluid rounded shadow', '', {
+    src: data.url,
+    alt: data.title,
+    style: 'max-height: 500px; object-fit: cover;',
+  });
+  imageWrapper.appendChild(image);
+
+  const explanation = createHtmlElement('p', 'lead', data.explanation);
+
+  customAppendChild(section, title, date, imageWrapper, explanation);
+  main.appendChild(section);
+};
