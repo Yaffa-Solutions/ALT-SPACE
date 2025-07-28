@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const renderHome = () => {
   let main = document.querySelector("main");
   main.appendChild(renderHeroSection());
+  main.appendChild(renderFeaturesSection());
 };
 
 const renderHeroSection = () => {
@@ -79,3 +80,69 @@ const renderHeroSection = () => {
 
   return section;
 };
+
+function renderFeaturesSection() {
+  const section = createHtmlElement("section", "container py-5 mb-5");
+  const row = createHtmlElement("div", "row g-5");
+
+  const cardsData = [
+    {
+      icon: "fas fa-star",
+      title: "Curated Collections",
+      description:
+        "Discover hand-picked space imagery from NASA's vast archives, organized for easy exploration.",
+    },
+    {
+      icon: "fas fa-heart",
+      title: "Save Favorites",
+      description:
+        "Create your personal collection of space wonders to revisit anytime.",
+    },
+    {
+      icon: "fas fa-images",
+      title: "Create Albums",
+      description:
+        "Organize your discoveries into custom albums for different themes or projects.",
+    },
+  ];
+
+  cardsData.forEach(({ icon, title, description }) => {
+    const card = renderFeatureCard(icon, title, description);
+    row.appendChild(card);
+  });
+
+  section.appendChild(row);
+  return section;
+}
+
+function renderFeatureCard(iconClass, title, description) {
+  const col = createHtmlElement("div", "col-md-4");
+
+  const card = createHtmlElement(
+    "div",
+    "card gradient-bg text-white h-100 border-0 shadow-lg rounded-3 overflow-hidden"
+  );
+
+  const cardBody = createHtmlElement("div", "card-body p-4 text-center");
+
+  const iconWrapper = createHtmlElement(
+    "div",
+    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto",
+    "",
+    {
+      style: "width: 80px; height: 80px;",
+    }
+  );
+
+  const icon = createHtmlElement("i", `${iconClass} fs-3 text-primary`);
+
+  const heading = createHtmlElement("h3", "h4 fw-bold mb-3", title);
+  const paragraph = createHtmlElement("p", "mb-0", description);
+
+  customAppendChild(iconWrapper, icon);
+  customAppendChild(cardBody, iconWrapper, heading, paragraph);
+  card.appendChild(cardBody);
+  col.appendChild(card);
+
+  return col;
+}
