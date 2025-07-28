@@ -1,10 +1,66 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.prepend(renderNavbar());
   renderHome();
 });
 
 const renderHome = () => {
   let main = document.querySelector("main");
   main.appendChild(renderHeroSection());
+  main.appendChild(renderFeaturesSection());
+};
+
+const renderNavbar = () => {
+  const nav = createHtmlElement(
+    "nav",
+    "navbar navbar-expand-lg navbar-dark bg-black bg-opacity-75 shadow-lg px-4 py-3"
+  );
+
+  const container = createHtmlElement("div", "container-fluid");
+
+  const brand = createHtmlElement(
+    "span",
+    "navbar-brand fw-bold fs-3 text-primary",
+    "🌌 ALTSPACE"
+  );
+
+  const toggler = createHtmlElement("button", "navbar-toggler", "", {
+    type: "button",
+    "data-bs-toggle": "collapse",
+    "data-bs-target": "#navbarNav",
+    "aria-controls": "navbarNav",
+    "aria-expanded": "false",
+    "aria-label": "Toggle navigation",
+  });
+  toggler.innerHTML = '<span class="navbar-toggler-icon"></span>';
+
+  const navCollapse = createHtmlElement("div", "collapse navbar-collapse", "", {
+    id: "navbarNav",
+  });
+
+  const navList = createHtmlElement(
+    "ul",
+    "navbar-nav ms-auto mb-2 mb-lg-0 gap-3 fs-5"
+  );
+
+  const links = [
+    { href: "#/", label: "Home" },
+    { href: "#/favorites", label: "Favorites" },
+    { href: "#/albums", label: "Albums" },
+    { href: "#/random", label: "Random Fact" },
+  ];
+
+  links.forEach(({ href, label }) => {
+    const link = createHtmlElement("a", "nav-link", label, { href });
+    const listItem = createHtmlElement("li", "nav-item");
+    listItem.appendChild(link);
+    navList.appendChild(listItem);
+  });
+
+  navCollapse.appendChild(navList);
+  customAppendChild(container, brand, toggler, navCollapse);
+  nav.appendChild(container);
+
+  return nav;
 };
 
 const renderHeroSection = () => {
@@ -79,53 +135,68 @@ const renderHeroSection = () => {
 
   return section;
 };
+const renderFeaturesSection = () => {
+  const section = createHtmlElement("section", "container py-5 mb-5");
+  const row = createHtmlElement("div", "row g-5");
 
-const getRandomSpaceFact = () => {
-  const getRandomDate = () => {
-    const start = new Date(1995, 5, 16);
-    const end = new Date();
-    const randomTime =
-      start.getTime() + Math.random() * (end.getTime() - start.getTime());
-    return new Date(randomTime).toISOString().split('T')[0];
-  };
+  const cardsData = [
+    {
+      icon: "fas fa-star",
+      title: "Curated Collections",
+      description:
+        "Discover hand-picked space imagery from NASA's vast archives, organized for easy exploration.",
+    },
+    {
+      icon: "fas fa-heart",
+      title: "Save Favorites",
+      description:
+        "Create your personal collection of space wonders to revisit anytime.",
+    },
+    {
+      icon: "fas fa-images",
+      title: "Create Albums",
+      description:
+        "Organize your discoveries into custom albums for different themes or projects.",
+    },
+  ];
 
-  const date = getRandomDate();
-  const apiKey = 'DEMO_KEY';
-  const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`;
-
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      renderRandomFactSection(data);
-    } else {
-      alert('Failed to fetch space fact.');
-    }
-  };
-
-  xhr.send();
-};
-const renderRandomFactSection = (data) => {
-  const main = document.querySelector('main');
-  main.innerHTML = '';
-
-  const section = createHtmlElement('section', 'container py-5 text-white');
-
-  const title = createHtmlElement('h2', 'mb-4 display-5 fw-bold', data.title);
-  const date = createHtmlElement('p', 'text-muted', `${data.date}`);
-
-  const imageWrapper = createHtmlElement('div', 'mb-4 text-center');
-  const image = createHtmlElement('img', 'img-fluid rounded shadow', '', {
-    src: data.url,
-    alt: data.title,
-    style: 'max-height: 500px; object-fit: cover;',
+  cardsData.forEach(({ icon, title, description }) => {
+    const card = renderFeatureCard(icon, title, description);
+    row.appendChild(card);
   });
-  imageWrapper.appendChild(image);
 
-  const explanation = createHtmlElement('p', 'lead', data.explanation);
+  section.appendChild(row);
+  return section;
+};
 
-  customAppendChild(section, title, date, imageWrapper, explanation);
-  main.appendChild(section);
+const renderFeatureCard = (iconClass, title, description) => {
+  const col = createHtmlElement("div", "col-md-4");
+
+  const card = createHtmlElement(
+    "div",
+    "card gradient-bg text-white h-100 border-0 shadow-lg rounded-3 overflow-hidden"
+  );
+
+  const cardBody = createHtmlElement("div", "card-body p-4 text-center");
+
+  const iconWrapper = createHtmlElement(
+    "div",
+    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto",
+    "",
+    {
+      style: "width: 80px; height: 80px;",
+    }
+  );
+
+  const icon = createHtmlElement("i", `${iconClass} fs-3 text-primary`);
+
+  const heading = createHtmlElement("h3", "h4 fw-bold mb-3", title);
+  const paragraph = createHtmlElement("p", "mb-0", description);
+
+  customAppendChild(iconWrapper, icon);
+  customAppendChild(cardBody, iconWrapper, heading, paragraph);
+  card.appendChild(cardBody);
+  col.appendChild(card);
+
+  return col;
 };
