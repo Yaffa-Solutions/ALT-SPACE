@@ -201,3 +201,98 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
+
+
+
+//////////////Nada 
+
+
+const fetch =(url, callback)=>{
+  
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET',url,true);
+  xhr.onreadystatechange =()=>{
+    if(xhr.readyState == 4 && xhr.status ==200){
+        try{      
+            const response = JSON.parse(xhr.responseText);
+            console.log(response); 
+            callback(response.items);
+        }catch(er){
+                console.error('Error while parsing response:',er);
+        }
+           
+    }else{
+        console.error('Failed to fetch Data. Status code:',xhr.status);
+    }
+   
+}
+xhr.send();
+}
+
+
+const getElemnt=(elem)=> document.querySelector(elem);
+ let countLst = 6;
+ let showAll = true;
+const renderListNews = (lst) => {
+  
+  const main = getElemnt('#app'); 
+
+  const sectionHerader_card= createElem('section');
+  sectionHerader_card.id="sectionNews";
+  const sectionHeader = createElem('div', 'd-flex justify-content-between align-items-center mb-4');
+  const container_cards = createElem('section');
+  const sectionTitle = createElem('h2', 'fw-bold text-white py-4 m-0', '📡 Space News');
+  const viewMoreBtn = createElem('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
+  container_cards.className = 'row justify-content-center';
+
+  
+  viewMoreBtn.onclick=()=>{
+getElemnt('#sectionNews').remove();
+ 
+   if(showAll){
+   countLst=lst.length 
+   }else{
+    countLst =6;
+  }
+     showAll =!showAll;  
+     renderListNews(lst);
+  }
+
+  appendParent(sectionHeader, sectionTitle);
+  appendParent(sectionHeader, viewMoreBtn);
+  //appendParent(main, sectionHeader);
+
+
+  
+
+
+  lst.slice(0,countLst).forEach((i) => {
+    const col = createElem('div', 'col-12 col-md-4 mb-4 d-flex');
+    const card = createElem('div', 'card border-primary py-2 px-2 mb-3 h-100 position-relative');
+    const badge = createElem('div', 'bg-info text-white px-2 py-1 position-absolute rounded-start');
+    badge.textContent = 'News';
+    badge.style.top = '0';
+    badge.style.left = '0';
+    badge.style.transform = 'translateY(-50%)';
+    const cardBody = createElem('div', 'card-body d-flex flex-column');
+    appendParent(card, badge);
+    appendParent(cardBody, createElem('h5', '', `${i.title}`));
+    appendParent(cardBody, createElem('p', '', `${i.description.slice(0,100)+'...'}`));
+    const link = createElem('a', 'btn btn-outline-primary', 'Read More');
+    link.style.alignSelf = 'flex-start';
+     link.style.marginTop = 'auto';
+    link.href = i.link; 
+    appendParent(cardBody, link);
+    appendParent(cardBody, createElem('p', 'text-start pt-2 text-muted  mb-0', `${i.pubDate}`));
+    appendParent(card, cardBody);
+    appendParent(col, card);
+    appendParent(container_cards, col);
+  });
+
+  appendParent(sectionHerader_card , sectionHeader);
+  appendParent(sectionHerader_card , container_cards);
+  appendParent(main, sectionHerader_card);
+};
+
+
+fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',renderListNews);
