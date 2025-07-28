@@ -110,3 +110,14 @@ body {
   font-style: normal;
   font-family: "Space Grotesk", sans-serif;
 }
+
+.gradient-bg {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
