@@ -231,24 +231,42 @@ xhr.send();
 
 
 const getElemnt=(elem)=> document.querySelector(elem);
-
+ let countLst = 6;
+ let showAll = true;
 const renderListNews = (lst) => {
-  const main = getElemnt('#app');
-  const sectionHeader = createElem('div', 'd-flex justify-content-between align-items-center mb-4');
+  
+  const main = getElemnt('#app'); 
 
+  const sectionHerader_card= createElem('section');
+  sectionHerader_card.id="sectionNews";
+  const sectionHeader = createElem('div', 'd-flex justify-content-between align-items-center mb-4');
+  const container_cards = createElem('section');
   const sectionTitle = createElem('h2', 'fw-bold text-white py-4 m-0', '📡 Space News');
-  const viewMoreBtn = createElem('button', 'btn btn-outline-info', ' View More');
+  const viewMoreBtn = createElem('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
+  container_cards.className = 'row justify-content-center';
+
+  
+  viewMoreBtn.onclick=()=>{
+getElemnt('#sectionNews').remove();
+ 
+   if(showAll){
+   countLst=lst.length 
+   }else{
+    countLst =6;
+  }
+     showAll =!showAll;  
+     renderListNews(lst);
+  }
 
   appendParent(sectionHeader, sectionTitle);
   appendParent(sectionHeader, viewMoreBtn);
-  appendParent(main, sectionHeader);
+  //appendParent(main, sectionHeader);
 
-  const container_cards = createElem('section');
-  container_cards.id="lstNews";
 
-  container_cards.className = 'row justify-content-center';
+  
 
-  lst.forEach((i) => {
+
+  lst.slice(0,countLst).forEach((i) => {
     const col = createElem('div', 'col-12 col-md-4 mb-4 d-flex');
     const card = createElem('div', 'card border-primary py-2 px-2 mb-3 h-100 position-relative');
     const badge = createElem('div', 'bg-info text-white px-2 py-1 position-absolute rounded-start');
@@ -271,7 +289,9 @@ const renderListNews = (lst) => {
     appendParent(container_cards, col);
   });
 
-  appendParent(main, container_cards);
+  appendParent(sectionHerader_card , sectionHeader);
+  appendParent(sectionHerader_card , container_cards);
+  appendParent(main, sectionHerader_card);
 };
 
 
