@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.body.prepend(renderNavbar());
   renderHome();
 });
 
@@ -6,6 +7,60 @@ const renderHome = () => {
   let main = document.querySelector("main");
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
+};
+
+const renderNavbar = () => {
+  const nav = createHtmlElement(
+    "nav",
+    "navbar navbar-expand-lg navbar-dark bg-black bg-opacity-75 shadow-lg px-4 py-3"
+  );
+
+  const container = createHtmlElement("div", "container-fluid");
+
+  const brand = createHtmlElement(
+    "span",
+    "navbar-brand fw-bold fs-3 text-primary",
+    "🌌 ALTSPACE"
+  );
+
+  const toggler = createHtmlElement("button", "navbar-toggler", "", {
+    type: "button",
+    "data-bs-toggle": "collapse",
+    "data-bs-target": "#navbarNav",
+    "aria-controls": "navbarNav",
+    "aria-expanded": "false",
+    "aria-label": "Toggle navigation",
+  });
+  toggler.innerHTML = '<span class="navbar-toggler-icon"></span>';
+
+  const navCollapse = createHtmlElement("div", "collapse navbar-collapse", "", {
+    id: "navbarNav",
+  });
+
+  const navList = createHtmlElement(
+    "ul",
+    "navbar-nav ms-auto mb-2 mb-lg-0 gap-3 fs-5"
+  );
+
+  const links = [
+    { href: "#/", label: "Home" },
+    { href: "#/favorites", label: "Favorites" },
+    { href: "#/albums", label: "Albums" },
+    { href: "#/random", label: "Random Fact" },
+  ];
+
+  links.forEach(({ href, label }) => {
+    const link = createHtmlElement("a", "nav-link", label, { href });
+    const listItem = createHtmlElement("li", "nav-item");
+    listItem.appendChild(link);
+    navList.appendChild(listItem);
+  });
+
+  navCollapse.appendChild(navList);
+  customAppendChild(container, brand, toggler, navCollapse);
+  nav.appendChild(container);
+
+  return nav;
 };
 
 const renderHeroSection = () => {
@@ -81,7 +136,7 @@ const renderHeroSection = () => {
   return section;
 };
 
-function renderFeaturesSection() {
+const renderFeaturesSection = () => {
   const section = createHtmlElement("section", "container py-5 mb-5");
   const row = createHtmlElement("div", "row g-5");
 
@@ -113,9 +168,9 @@ function renderFeaturesSection() {
 
   section.appendChild(row);
   return section;
-}
+};
 
-function renderFeatureCard(iconClass, title, description) {
+const renderFeatureCard = (iconClass, title, description) => {
   const col = createHtmlElement("div", "col-md-4");
 
   const card = createHtmlElement(
@@ -145,4 +200,4 @@ function renderFeatureCard(iconClass, title, description) {
   col.appendChild(card);
 
   return col;
-}
+};
