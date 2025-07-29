@@ -206,9 +206,9 @@ const createFactsSection = () => {
   let section = document.querySelector('#facts-section');
 
   if (!section) {
-    section = createHtmlElement('section', 'container my-5', '', {
-      id: 'facts-section',
-    });
+    section = document.createElement('section');
+    section.id = 'facts-section';
+    section.classList.add('container', 'my-5');
 
     const heading = createHtmlElement(
       'h2',
@@ -220,8 +220,7 @@ const createFactsSection = () => {
       id: 'facts-wrapper',
     });
 
-    section.appendChild(heading);
-    section.appendChild(wrapper);
+    customAppendChild(section, heading, wrapper);
     document.body.appendChild(section);
   }
 
