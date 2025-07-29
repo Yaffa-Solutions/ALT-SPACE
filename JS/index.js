@@ -1,10 +1,7 @@
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
 
-
-
 const renderHome = () => {
   let main = document.querySelector("main");
-  main.innerHTML = " ";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
 };
@@ -116,7 +113,7 @@ const renderHeroSection = () => {
           background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
                       url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') 
                       no-repeat center center/cover;
-          min-height: 80vh; display: flex; align-items: center;
+          min-height: 80vh; display: flex; align-items: center; margin-top:100px
         `,
     }
   );
@@ -244,25 +241,6 @@ const renderFeatureCard = (iconClass, title, description) => {
   return col;
 };
 
-const renderRoute = () => {
-  const main = document.querySelector("main");
-  const hash = window.location.hash.replace("#", "") || "/";
-  main.innerHTML = "";
-
-  switch (hash) {
-    default:
-      renderHome();
-      break;
-  }
-};
-
-const renderPage = () => {
-  document.body.prepend(renderNavbar());
-  renderRoute();
-};
-
-window.addEventListener("hashchange", renderRoute);
-renderPage();
 const fetchSearchResults = async (searchState) => {
   const { q, mediaType, year } = searchState;
   let url = `${NASA_SEARCH_API}?q=${encodeURIComponent(q || "")}`;
@@ -275,7 +253,7 @@ const fetchSearchResults = async (searchState) => {
 const renderSearchPage = () => {
   const hero = createHtmlElement(
     "section",
-    "search-hero  position-relative py-5 mb-5",
+    "search-hero   position-relative py-5 mb-5",
     "",
     {
       style: `
@@ -735,3 +713,27 @@ const mediaCard = (item) => {
 
   return cardCol;
 };
+
+const renderRoute = () => {
+  const main = document.querySelector("main");
+  const hash = window.location.hash.replace("#", "") || "/";
+  main.innerHTML = "";
+
+  switch (hash) {
+    case "/search":
+      renderSearchPage();
+      break;
+
+    default:
+      renderHome();
+      break;
+  }
+};
+
+const renderPage = () => {
+  document.body.prepend(renderNavbar());
+  renderRoute();
+};
+
+window.addEventListener("hashchange", renderRoute);
+renderPage();
