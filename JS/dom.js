@@ -29,3 +29,25 @@ const createHtmlElement = (
 const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
+
+const fetchDataWithXHR = (url, onSuccess, onError) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState !== 4) return;
+
+    if (xhr.status === 200) {
+      try {
+        const data = JSON.parse(xhr.responseText);
+        onSuccess(data);
+      } catch (e) {
+        onError(e);
+      }
+    } else {
+      onError(new Error(`Request failed with status ${xhr.status}`));
+    }
+  };
+
+  xhr.send();
+};
