@@ -237,17 +237,17 @@ const renderListNews = (lst) => {
   
   const main = getElemnt('#app'); 
 
-  const sectionHerader_card= createElem('section');
+  const sectionHerader_card= createHtmlElement('section');
   sectionHerader_card.id="sectionNews";
-  const sectionHeader = createElem('div', 'd-flex justify-content-between align-items-center mb-4');
-  const container_cards = createElem('section');
-  const sectionTitle = createElem('h2', 'fw-bold text-white py-4 m-0', '📡 Space News');
-  const viewMoreBtn = createElem('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
+  const sectionHeader = createHtmlElement('div', 'd-flex justify-content-between align-items-center mb-4');
+  const container_cards = createHtmlElement('section');
+  const sectionTitle = createHtmlElement('h2', 'fw-bold text-white py-4 m-0', '📡 Space News');
+  const viewMoreBtn = createHtmlElement('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
   container_cards.className = 'row justify-content-center';
 
   
   viewMoreBtn.onclick=()=>{
-getElemnt('#sectionNews').remove();
+  getElemnt('#sectionNews').remove();
  
    if(showAll){
    countLst=lst.length 
@@ -263,27 +263,24 @@ getElemnt('#sectionNews').remove();
   //appendParent(main, sectionHeader);
 
 
-  
-
-
   lst.slice(0,countLst).forEach((i) => {
-    const col = createElem('div', 'col-12 col-md-4 mb-4 d-flex');
-    const card = createElem('div', 'card border-primary py-2 px-2 mb-3 h-100 position-relative');
-    const badge = createElem('div', 'bg-info text-white px-2 py-1 position-absolute rounded-start');
+    const col = createHtmlElement('div', 'col-12 col-md-4  mb-4 d-flex');
+    const card = createHtmlElement('div', 'card border-primary  py-2 px-2 mb-3 h-100 position-relative');
+    const badge = createHtmlElement('div', 'bg-info text-white px-2 py-1 position-absolute rounded-start');
     badge.textContent = 'News';
     badge.style.top = '0';
     badge.style.left = '0';
     badge.style.transform = 'translateY(-50%)';
-    const cardBody = createElem('div', 'card-body d-flex flex-column');
+    const cardBody = createHtmlElement('div', 'card-body d-flex flex-column');
     appendParent(card, badge);
-    appendParent(cardBody, createElem('h5', '', `${i.title}`));
-    appendParent(cardBody, createElem('p', '', `${i.description.slice(0,100)+'...'}`));
-    const link = createElem('a', 'btn btn-outline-primary', 'Read More');
+    appendParent(cardBody, createHtmlElement('h5', 'fw-bold', `${i.title}`));
+    appendParent(cardBody, createHtmlElement('p', '', `${i.description.slice(0,100)+'...'}`));
+    const link = createHtmlElement('a', 'btn btn-outline-primary', 'Read More');
     link.style.alignSelf = 'flex-start';
      link.style.marginTop = 'auto';
     link.href = i.link; 
     appendParent(cardBody, link);
-    appendParent(cardBody, createElem('p', 'text-start pt-2 text-muted  mb-0', `${i.pubDate}`));
+    appendParent(cardBody, createHtmlElement('p', 'text-start pt-2 text-muted  mb-0', `${i.pubDate}`));
     appendParent(card, cardBody);
     appendParent(col, card);
     appendParent(container_cards, col);
@@ -292,7 +289,54 @@ getElemnt('#sectionNews').remove();
   appendParent(sectionHerader_card , sectionHeader);
   appendParent(sectionHerader_card , container_cards);
   appendParent(main, sectionHerader_card);
+
+  // fetch('http://api.open-notify.org/astros.json',RenderCounter);
+  RenderCounter([{counter :astronautCount,content:'Number of astronauts'},{counter :200,content:'Number of astronauts2'} , {counter :160,content:'Number of astronauts3'}]);
 };
 
+
+
+
+
+
+
+const RenderCounter=(lst)=>{
+    const main = getElemnt('#app'); 
+  const container_counters = createHtmlElement('section','d-flex justify-content-evenly p-2 mt-18 ');
+  container_counters.style.marginTop = '100px';
+  lst.forEach((obj,index)=>{
+
+
+    const {counter , content} = obj;
+const divCounter_content = createHtmlElement('div', 'd-flex flex-column align-items-center justify-content-center text-center p-3');   const counterDiv = createHtmlElement('h2','text-white');
+  counterDiv.id=`counter-${index}`;
+
+  const titleCounter = createHtmlElement('h5','fw-bold text-white  text-center');
+   titleCounter.textContent =content;
+
+   appendParent(divCounter_content , counterDiv);
+   appendParent(divCounter_content,titleCounter);
+
+  // appendParent(container_counters,counterDiv); 
+  // appendParent(container_counters,titleCounter);
+
+  appendParent(container_counters , divCounter_content);
+  appendParent(main,container_counters);
+  let currentCount = 0;
+ // const targetCount = 100;
+  const animationSpeed = 20;
+
+  setInterval(()=>{
+      if(currentCount < counter){
+        currentCount++;
+        getElemnt(`#counter-${index}`).textContent = currentCount;
+      }else{
+        clearInterval();
+      }
+  },animationSpeed);
+
+  });
+ 
+}
 
 fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',renderListNews);
