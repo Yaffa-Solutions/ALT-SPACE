@@ -135,7 +135,6 @@ const renderHeroSection = () => {
 
   return section;
 };
-
 const renderFeaturesSection = () => {
   const section = createHtmlElement("section", "container py-5 mb-5");
   const row = createHtmlElement("div", "row g-5");
