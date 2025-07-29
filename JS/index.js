@@ -200,8 +200,6 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
-<<<<<<< HEAD
-
 
 
 //////////////Nada 
@@ -340,5 +338,3 @@ const divCounter_content = createHtmlElement('div', 'd-flex flex-column align-it
 }
 
 fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',renderListNews);
-=======
->>>>>>> develop
