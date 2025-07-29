@@ -196,11 +196,11 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
-const routes = {
-  "/": renderHome,
-};
+
 const renderRoute = () => {
-  const hash = location.hash.replace("#", "") || "/";
+  const main = document.querySelector("main");
+  const hash = window.location.hash.replace("#", "") || "/";
+  main.innerHTML = "";
 
   if (hash.startsWith("/detail/")) {
     const id = hash.split("/detail/")[1];
@@ -212,8 +212,12 @@ const renderRoute = () => {
     renderArticleDetail(id);
     return;
   }
-  const route = routes[hash];
-  route();
+
+  switch (hash) {
+    default:
+      renderHome();
+      break;
+  }
 };
 
 const renderPage = () => {
