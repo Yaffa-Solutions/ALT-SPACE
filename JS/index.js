@@ -1,10 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.prepend(renderNavbar());
-  renderHome();
-});
-
 const renderHome = () => {
   let main = document.querySelector("main");
+  main.innerHTML = " ";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
 };
@@ -200,3 +196,32 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
+const routes = {
+  "/": renderHome,
+};
+const renderRoute = () => {
+  const hash = location.hash.replace("#", "") || "/";
+
+  setTimeout(() => {
+    if (hash.startsWith("/detail/")) {
+      const id = hash.split("/detail/")[1];
+      renderDetailPage(id);
+      return;
+    }
+    if (hash.startsWith("/article/")) {
+      const id = hash.split("/article/")[1];
+      renderArticleDetail(id);
+      return;
+    }
+    const route = routes[hash];
+    route();
+  }, 300);
+};
+
+const renderPage = () => {
+  document.body.prepend(renderNavbar());
+  renderRoute();
+};
+
+window.addEventListener("hashchange", renderRoute);
+renderPage();
