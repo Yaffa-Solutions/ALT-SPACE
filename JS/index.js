@@ -202,20 +202,18 @@ const routes = {
 const renderRoute = () => {
   const hash = location.hash.replace("#", "") || "/";
 
-  setTimeout(() => {
-    if (hash.startsWith("/detail/")) {
-      const id = hash.split("/detail/")[1];
-      renderDetailPage(id);
-      return;
-    }
-    if (hash.startsWith("/article/")) {
-      const id = hash.split("/article/")[1];
-      renderArticleDetail(id);
-      return;
-    }
-    const route = routes[hash];
-    route();
-  }, 300);
+  if (hash.startsWith("/detail/")) {
+    const id = hash.split("/detail/")[1];
+    renderDetailPage(id);
+    return;
+  }
+  if (hash.startsWith("/article/")) {
+    const id = hash.split("/article/")[1];
+    renderArticleDetail(id);
+    return;
+  }
+  const route = routes[hash];
+  route();
 };
 
 const renderPage = () => {
