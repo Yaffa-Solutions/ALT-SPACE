@@ -29,15 +29,3 @@ const createHtmlElement = (
 const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
-
-
-const createElem = (tag, classes = '', text = "") => {
-  let element = document.createElement(tag);
- element.className = classes;
-  element.textContent = text;
-  return element;
-};
-const appendParent = (parent, child) => {
-    parent.appendChild(child);
-};
-

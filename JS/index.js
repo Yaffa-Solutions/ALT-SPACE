@@ -135,7 +135,6 @@ const renderHeroSection = () => {
 
   return section;
 };
-
 const renderFeaturesSection = () => {
   const section = createHtmlElement("section", "container py-5 mb-5");
   const row = createHtmlElement("div", "row g-5");
@@ -201,6 +200,7 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
+<<<<<<< HEAD
 
 
 
@@ -340,3 +340,5 @@ const divCounter_content = createHtmlElement('div', 'd-flex flex-column align-it
 }
 
 fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',renderListNews);
+=======
+>>>>>>> develop
