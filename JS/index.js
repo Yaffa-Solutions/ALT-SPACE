@@ -1,57 +1,57 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   document.body.prepend(renderNavbar());
   renderHome();
 });
 
 const renderHome = () => {
-  let main = document.querySelector("main");
+  let main = document.querySelector('main');
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
 };
 
 const renderNavbar = () => {
   const nav = createHtmlElement(
-    "nav",
-    "navbar navbar-expand-lg navbar-dark bg-black bg-opacity-75 shadow-lg px-4 py-3"
+    'nav',
+    'navbar navbar-expand-lg navbar-dark bg-black bg-opacity-75 shadow-lg px-4 py-3'
   );
 
-  const container = createHtmlElement("div", "container-fluid");
+  const container = createHtmlElement('div', 'container-fluid');
 
   const brand = createHtmlElement(
-    "span",
-    "navbar-brand fw-bold fs-3 text-primary",
-    "🌌 ALTSPACE"
+    'span',
+    'navbar-brand fw-bold fs-3 text-primary',
+    '🌌 ALTSPACE'
   );
 
-  const toggler = createHtmlElement("button", "navbar-toggler", "", {
-    type: "button",
-    "data-bs-toggle": "collapse",
-    "data-bs-target": "#navbarNav",
-    "aria-controls": "navbarNav",
-    "aria-expanded": "false",
-    "aria-label": "Toggle navigation",
+  const toggler = createHtmlElement('button', 'navbar-toggler', '', {
+    type: 'button',
+    'data-bs-toggle': 'collapse',
+    'data-bs-target': '#navbarNav',
+    'aria-controls': 'navbarNav',
+    'aria-expanded': 'false',
+    'aria-label': 'Toggle navigation',
   });
   toggler.innerHTML = '<span class="navbar-toggler-icon"></span>';
 
-  const navCollapse = createHtmlElement("div", "collapse navbar-collapse", "", {
-    id: "navbarNav",
+  const navCollapse = createHtmlElement('div', 'collapse navbar-collapse', '', {
+    id: 'navbarNav',
   });
 
   const navList = createHtmlElement(
-    "ul",
-    "navbar-nav ms-auto mb-2 mb-lg-0 gap-3 fs-5"
+    'ul',
+    'navbar-nav ms-auto mb-2 mb-lg-0 gap-3 fs-5'
   );
 
   const links = [
-    { href: "#/", label: "Home" },
-    { href: "#/favorites", label: "Favorites" },
-    { href: "#/albums", label: "Albums" },
-    { href: "#/random", label: "Random Fact" },
+    { href: '#/', label: 'Home' },
+    { href: '#/favorites', label: 'Favorites' },
+    { href: '#/albums', label: 'Albums' },
+    { href: '#/random', label: 'Random Fact' },
   ];
 
   links.forEach(({ href, label }) => {
-    const link = createHtmlElement("a", "nav-link", label, { href });
-    const listItem = createHtmlElement("li", "nav-item");
+    const link = createHtmlElement('a', 'nav-link', label, { href });
+    const listItem = createHtmlElement('li', 'nav-item');
     listItem.appendChild(link);
     navList.appendChild(listItem);
   });
@@ -65,9 +65,9 @@ const renderNavbar = () => {
 
 const renderHeroSection = () => {
   const section = createHtmlElement(
-    "section",
-    "hero-section position-relative overflow-hidden text-center py-5 mb-5",
-    "",
+    'section',
+    'hero-section position-relative overflow-hidden text-center py-5 mb-5',
+    '',
     {
       style: `
           background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
@@ -79,53 +79,53 @@ const renderHeroSection = () => {
   );
 
   const container = createHtmlElement(
-    "div",
-    "container position-relative z-index-1"
+    'div',
+    'container position-relative z-index-1'
   );
 
   const title = createHtmlElement(
-    "h1",
-    "display-3 fw-bold mb-4 gradient-text",
-    "Galactic Gallery"
+    'h1',
+    'display-3 fw-bold mb-4 gradient-text',
+    'Galactic Gallery'
   );
   const subtitle = createHtmlElement(
-    "p",
-    "lead fs-2 text-light mb-5",
+    'p',
+    'lead fs-2 text-light mb-5',
     "Explore the cosmos through NASA's eyes"
   );
 
   const buttonsWrapper = createHtmlElement(
-    "div",
-    "d-flex justify-content-center gap-4"
+    'div',
+    'd-flex justify-content-center gap-4'
   );
 
   const exploreBtn = createHtmlElement(
-    "a",
-    "btn btn-primary btn-lg px-4 py-3 rounded-pill shadow-lg",
-    "",
+    'a',
+    'btn btn-primary btn-lg px-4 py-3 rounded-pill shadow-lg',
+    '',
     {
-      href: "#/search",
+      href: '#/search',
     }
   );
   exploreBtn.innerHTML = `<i class="fas fa-search me-2"></i> Start Exploring`;
 
   const randomBtn = createHtmlElement(
-    "a",
-    "btn btn-outline-light btn-lg px-4 py-3 rounded-pill shadow-lg",
-    "",
+    'a',
+    'btn btn-outline-light btn-lg px-4 py-3 rounded-pill shadow-lg',
+    '',
     {
-      href: "#/random",
+      href: '#/random',
     }
   );
   randomBtn.innerHTML = `<i class="fas fa-random me-2"></i> Random Discovery`;
 
   const scrollIconWrapper = createHtmlElement(
-    "div",
-    "floating position-absolute bottom-0 start-50 translate-middle-x mb-5"
+    'div',
+    'floating position-absolute bottom-0 start-50 translate-middle-x mb-5'
   );
   const scrollIcon = createHtmlElement(
-    "i",
-    "fas fa-chevron-down text-white fs-1"
+    'i',
+    'fas fa-chevron-down text-white fs-1'
   );
 
   customAppendChild(buttonsWrapper, exploreBtn, randomBtn);
@@ -137,27 +137,27 @@ const renderHeroSection = () => {
 };
 
 const renderFeaturesSection = () => {
-  const section = createHtmlElement("section", "container py-5 mb-5");
-  const row = createHtmlElement("div", "row g-5");
+  const section = createHtmlElement('section', 'container py-5 mb-5');
+  const row = createHtmlElement('div', 'row g-5');
 
   const cardsData = [
     {
-      icon: "fas fa-star",
-      title: "Curated Collections",
+      icon: 'fas fa-star',
+      title: 'Curated Collections',
       description:
         "Discover hand-picked space imagery from NASA's vast archives, organized for easy exploration.",
     },
     {
-      icon: "fas fa-heart",
-      title: "Save Favorites",
+      icon: 'fas fa-heart',
+      title: 'Save Favorites',
       description:
-        "Create your personal collection of space wonders to revisit anytime.",
+        'Create your personal collection of space wonders to revisit anytime.',
     },
     {
-      icon: "fas fa-images",
-      title: "Create Albums",
+      icon: 'fas fa-images',
+      title: 'Create Albums',
       description:
-        "Organize your discoveries into custom albums for different themes or projects.",
+        'Organize your discoveries into custom albums for different themes or projects.',
     },
   ];
 
@@ -171,28 +171,28 @@ const renderFeaturesSection = () => {
 };
 
 const renderFeatureCard = (iconClass, title, description) => {
-  const col = createHtmlElement("div", "col-md-4");
+  const col = createHtmlElement('div', 'col-md-4');
 
   const card = createHtmlElement(
-    "div",
-    "card gradient-bg text-white h-100 border-0 shadow-lg rounded-3 overflow-hidden"
+    'div',
+    'card gradient-bg text-white h-100 border-0 shadow-lg rounded-3 overflow-hidden'
   );
 
-  const cardBody = createHtmlElement("div", "card-body p-4 text-center");
+  const cardBody = createHtmlElement('div', 'card-body p-4 text-center');
 
   const iconWrapper = createHtmlElement(
-    "div",
-    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto",
-    "",
+    'div',
+    'icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto',
+    '',
     {
-      style: "width: 80px; height: 80px;",
+      style: 'width: 80px; height: 80px;',
     }
   );
 
-  const icon = createHtmlElement("i", `${iconClass} fs-3 text-primary`);
+  const icon = createHtmlElement('i', `${iconClass} fs-3 text-primary`);
 
-  const heading = createHtmlElement("h3", "h4 fw-bold mb-3", title);
-  const paragraph = createHtmlElement("p", "mb-0", description);
+  const heading = createHtmlElement('h3', 'h4 fw-bold mb-3', title);
+  const paragraph = createHtmlElement('p', 'mb-0', description);
 
   customAppendChild(iconWrapper, icon);
   customAppendChild(cardBody, iconWrapper, heading, paragraph);
@@ -202,22 +202,63 @@ const renderFeatureCard = (iconClass, title, description) => {
   return col;
 };
 
-const renderRandomFactSection = (data) => {
+const createFactsSection = () => {
+  let section = document.querySelector('#facts-section');
 
-  const section = createHtmlElement('section', 'container py-5 text-white');
+  if (!section) {
+    section = createHtmlElement('section', 'container my-5', '', {
+      id: 'facts-section',
+    });
 
-  const title = createHtmlElement('h2', 'mb-4 display-5 fw-bold', data.title);
-  const date = createHtmlElement('p', 'text-muted', `${data.date}`);
+    const heading = createHtmlElement(
+      'h2',
+      'fw-bold text-center mb-5 text-primary',
+      'Astronomy Facts'
+    );
 
-  const imageWrapper = createHtmlElement('div', 'mb-4 text-center');
-  const image = createHtmlElement('img', 'img-fluid rounded shadow', '', {
-    src: data.url,
-    alt: data.title,
-    style: 'max-height: 500px; object-fit: cover;',
-  });
-  imageWrapper.appendChild(image);
+    const wrapper = createHtmlElement('div', 'row g-4', '', {
+      id: 'facts-wrapper',
+    });
 
-  const explanation = createHtmlElement('p', 'lead', data.explanation);
+    section.appendChild(heading);
+    section.appendChild(wrapper);
+    document.body.appendChild(section);
+  }
 
-  customAppendChild(section, title, date, imageWrapper, explanation);
+  return document.querySelector('#facts-wrapper');
+};
+
+const renderFactCard = (data) => {
+  const wrapper = createFactsSection();
+
+  const col = createHtmlElement('div', 'col-md-6 col-lg-4');
+
+  const card = createHtmlElement(
+    'div',
+    'card gradient-bg text-white h-100 border-0 shadow-lg rounded-3 overflow-hidden'
+  );
+
+  const media =
+    data.media_type === 'image'
+      ? createHtmlElement('img', 'card-img-top', '', {
+          src: data.url,
+          alt: data.title,
+        })
+      : createHtmlElement('iframe', 'card-img-top', '', {
+          src: data.url,
+          allowfullscreen: true,
+          frameborder: 0,
+          style: 'height: 250px;',
+        });
+
+  const body = createHtmlElement('div', 'card-body text-center p-4');
+
+  const title = createHtmlElement('h5', 'fw-bold mb-2', data.title);
+  const date = createHtmlElement('p', 'text-info small mb-3', `${data.date}`);
+  const explanation = createHtmlElement('p', 'mb-0 small', data.explanation);
+
+  customAppendChild(body, title, date, explanation);
+  customAppendChild(card, media, body);
+  col.appendChild(card);
+  wrapper.appendChild(col);
 };

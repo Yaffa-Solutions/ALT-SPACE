@@ -120,3 +120,11 @@ body {
   background-clip: text;
   color: transparent;
 }
+.gradient-bg {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+}
+
+.card-img-top {
+  object-fit: cover;
+  max-height: 250px;
+}
