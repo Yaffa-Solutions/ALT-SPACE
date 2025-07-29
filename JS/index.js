@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.body.prepend(renderNavbar());
   renderHome();
+
 });
 
 const renderHome = () => {
@@ -202,19 +203,36 @@ const renderFeatureCard = (iconClass, title, description) => {
 };
 
 
+
+
 //////////////Nada 
 
 
-const fetch =(url, callback)=>{
+const fetch =(url,async, callback, content)=>{
   
   const xhr = new XMLHttpRequest();
-  xhr.open('GET',url,true);
+  xhr.open('GET',url,async);
   xhr.onreadystatechange =()=>{
     if(xhr.readyState == 4 && xhr.status ==200){
         try{      
             const response = JSON.parse(xhr.responseText);
             console.log(response); 
-            callback(response.items);
+
+            let fisrtFoundArray = null;
+
+          if(!Array.isArray(response)){
+           for(const key in response){
+              if(Array.isArray(response[key])){
+                fisrtFoundArray = response[key];
+                break;
+              }
+            }
+
+          }else{
+            fisrtFoundArray = response;
+          }
+          
+            !(content)? callback(fisrtFoundArray) : callback(fisrtFoundArray,content);
         }catch(er){
            console.error('Error while parsing response:',er);
       }           
@@ -235,7 +253,7 @@ const renderListNews = (lst) => {
 
   const sectionHerader_card= createHtmlElement('section');
   sectionHerader_card.id="sectionNews";
-  const sectionHeader = createHtmlElement('div', 'd-flex justify-content-between align-items-center mb-4');
+  const sectionHeader = createHtmlElement('div', 'd-flex justify-content-between align-items-center mb-4',{id:'sectionHeader'});
   const container_cards = createHtmlElement('section');
   const sectionTitle = createHtmlElement('h2', 'fw-bold text-white py-4 m-0', '📡 Space News');
   const viewMoreBtn = createHtmlElement('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
@@ -283,11 +301,62 @@ const renderListNews = (lst) => {
   customAppendChild(sectionHerader_card , sectionHeader);
   customAppendChild(sectionHerader_card , container_cards);
   customAppendChild(main, sectionHerader_card);
+  
+   fetch('http://api.open-notify.org/astros.json',true,RenderCounter,'عدد رواد الفضاء');
+   fetch('https://api.le-systeme-solaire.net/rest/bodies/',true, RenderCounter,'عدد اجرام النظام الشمسي');
+   fetch('https://api.le-systeme-solaire.net/rest/bodies/', true,RenderCounter,'عدد اجرام النظام الشمسي');
+   fetch('https://api.nasa.gov/DONKI/FLR?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8',true,RenderCounter,'عدد التوهجات الشمسية ')
 
-  // fetch('http://api.open-notify.org/astros.json',RenderCounter);
-  RenderCounter([{counter :150,content:'Number of astronauts'},{counter :200,content:'Number of astronauts2'} , {counter :160,content:'Number of astronauts3'}]);
+ // RenderCounter([{counter :150,content:'Number of astronauts'},{counter :200,content:'Number of astronauts2'} , {counter :160,content:'Number of astronauts3'}]);
 };
 
 
+let index = 0;
+const main = getElemnt('#app'); 
+const container_counters = createHtmlElement(
+  'section',
+  'd-flex justify-content-center gap-4 flex-wrap p-2 mt-5'
+); 
+const RenderCounter=(lst , text)=>{
 
-fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',renderListNews);
+ const {counter , content} = {counter :lst.length , content :text }
+   
+ container_counters.style.marginTop = '100px';
+
+  index +=1;
+  const divCounter_content = createHtmlElement('div', 'd-flex flex-column align-items-center justify-content-center text-center p-3');  
+  const counterDiv = createHtmlElement('h2','text-white');
+  counterDiv.id=`counter-${index}`;
+  const titleCounter = createHtmlElement('h5','fw-bold text-white  text-center');
+   titleCounter.textContent =content;
+
+   customAppendChild(divCounter_content , counterDiv);
+   customAppendChild(divCounter_content,titleCounter);
+
+  // appendParent(container_counters,counterDiv); 
+  // appendParent(container_counters,titleCounter);
+
+  customAppendChild(container_counters , divCounter_content);
+  let currentCount = 0;
+ // const targetCount = 100;
+  const animationSpeed = 20;
+
+  const intervalId=setInterval(()=>{
+      if(currentCount < counter){
+        currentCount++;
+        getElemnt(`#counter-${index}`).textContent = currentCount;
+       // console.log(getElemnt(`#counter-${index}`));
+      }else{
+        clearInterval(intervalId);
+      }
+  },animationSpeed);
+  customAppendChild(main,container_counters);
+
+}
+
+fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',true,renderListNews);
+
+
+// const sectionHeader=getElemnt('#sectionHeader');
+// //.getBoundingClientRect().top;
+// alert(sectionHeader);
