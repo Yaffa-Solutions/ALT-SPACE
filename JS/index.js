@@ -1,12 +1,10 @@
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.prepend(renderNavbar());
-  renderSearchPage();
-});
+
 
 const renderHome = () => {
   let main = document.querySelector("main");
+  main.innerHTML = " ";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
 };
@@ -245,6 +243,26 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
+
+const renderRoute = () => {
+  const main = document.querySelector("main");
+  const hash = window.location.hash.replace("#", "") || "/";
+  main.innerHTML = "";
+
+  switch (hash) {
+    default:
+      renderHome();
+      break;
+  }
+};
+
+const renderPage = () => {
+  document.body.prepend(renderNavbar());
+  renderRoute();
+};
+
+window.addEventListener("hashchange", renderRoute);
+renderPage();
 const fetchSearchResults = async (searchState) => {
   const { q, mediaType, year } = searchState;
   let url = `${NASA_SEARCH_API}?q=${encodeURIComponent(q || "")}`;
