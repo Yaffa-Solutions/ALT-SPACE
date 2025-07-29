@@ -202,17 +202,6 @@ const renderRoute = () => {
   const hash = window.location.hash.replace("#", "") || "/";
   main.innerHTML = "";
 
-  if (hash.startsWith("/detail/")) {
-    const id = hash.split("/detail/")[1];
-    renderDetailPage(id);
-    return;
-  }
-  if (hash.startsWith("/article/")) {
-    const id = hash.split("/article/")[1];
-    renderArticleDetail(id);
-    return;
-  }
-
   switch (hash) {
     default:
       renderHome();
