@@ -1,10 +1,6 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.prepend(renderNavbar());
-  renderHome();
-});
-
 const renderHome = () => {
   let main = document.querySelector("main");
+  main.innerHTML = " ";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
 };
@@ -200,3 +196,23 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   return col;
 };
+
+const renderRoute = () => {
+  const main = document.querySelector("main");
+  const hash = window.location.hash.replace("#", "") || "/";
+  main.innerHTML = "";
+
+  switch (hash) {
+    default:
+      renderHome();
+      break;
+  }
+};
+
+const renderPage = () => {
+  document.body.prepend(renderNavbar());
+  renderRoute();
+};
+
+window.addEventListener("hashchange", renderRoute);
+renderPage();
