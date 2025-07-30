@@ -10,6 +10,7 @@ const renderHome = () => {
   main.innerHTML = " ";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
+
 };
 
 const renderNavbar = () => {
@@ -239,24 +240,23 @@ xhr.send();
 }
 
 
-const getElemnt=(elem)=> document.querySelector(elem);
+
  let countLst = 6;
  let showAll = true;
 const renderListNews = (lst) => {
   
   const main = getElemnt('#app'); 
 
-  const sectionHerader_card= createHtmlElement('section');
-  sectionHerader_card.id="sectionNews";
+  const sectionHerader_card= createHtmlElement('section','','',{id:"sectionNews"});
   const sectionHeader = createHtmlElement('div', 'd-flex justify-content-between align-items-center mb-4');
-  const container_cards = createHtmlElement('section');
+  const container_cards = createHtmlElement('section','row justify-content-center');
   const sectionTitle = createHtmlElement('h2', 'fw-bold text-white py-4 m-0 text-start', '📡 Space News');
   const viewMoreBtn = createHtmlElement('button', 'btn btn-outline-info',showAll ? ' View More' : 'View less');
-  container_cards.className = 'row justify-content-center';
-  
+  customAppendChild(sectionHeader, sectionTitle);
+  customAppendChild(sectionHeader, viewMoreBtn);
+
   viewMoreBtn.onclick=()=>{
   getElemnt('#sectionNews').remove();
- 
    if(showAll){
    countLst=lst.length 
    }else{
@@ -266,9 +266,6 @@ const renderListNews = (lst) => {
      renderListNews(lst);
   }
 
-  customAppendChild(sectionHeader, sectionTitle);
-  customAppendChild(sectionHeader, viewMoreBtn);
-
   lst.slice(0,countLst).forEach((i) => {
     const col = createHtmlElement('div', 'col-12 col-md-4  mb-4 d-flex');
     const card = createHtmlElement('div', 'card border-primary bg-dark text-white  py-2 px-2 mb-3 h-100 position-relative');
@@ -276,16 +273,14 @@ const renderListNews = (lst) => {
     badge.style.width = '60px';
     badge.style.height = '30px';
     const cardBody = createHtmlElement('div', 'card-body d-flex flex-column');
-
     customAppendChild(card, badge);
-    const link = createHtmlElement('a', 'btn btn-outline-primary', 'Read More',{href:i.link });
-    link.style.alignSelf = 'flex-start';
-    link.style.marginTop = 'auto';
 
+    const link = createHtmlElement('a', 'btn btn-outline-primary mt-auto align-self-start', 'Read More', {href: i.link });
     const title = createHtmlElement('h5', 'fw-bold', `${i.title}`);
     const description=createHtmlElement('p', 'text-secondary', `${i.description.slice(0,100)+'...'}`) ;
     const pubDate=createHtmlElement('p', 'text-start pt-2 text-secondary  mb-0', `${i.pubDate}`);
-     customAppendChild(cardBody,title ,description, link ,  pubDate);
+
+    customAppendChild(cardBody,title ,description, link ,  pubDate);
     customAppendChild(card, cardBody);
     customAppendChild(col,card );
     customAppendChild(container_cards, col );
@@ -304,32 +299,24 @@ const renderListNews = (lst) => {
 
 let index = 0;
 
-  const main = getElemnt('#app'); 
-  const container_counters = createHtmlElement('section','d-flex justify-content-center gap-4 flex-wrap p-2 mt-5'); 
-
+const main = getElemnt('#app'); 
+const container_counters = createHtmlElement('section','d-flex justify-content-center gap-4 flex-wrap p-2 mt-100'); 
 const renderInitialCounter=(content)=>{
-  container_counters.style.marginTop = '100px';
   index +=1;
   const divCounter_content = createHtmlElement('div', 'd-flex flex-column align-items-center justify-content-center text-center p-3');  
-  const counterText = createHtmlElement('h2','text-white');
-  counterText.id=`counter-${index}`;
-  counterText.textContent = 0;
-  const titleCounter = createHtmlElement('h5','fw-bold text-white  text-center');
-  titleCounter.textContent =content;
+  const counterText = createHtmlElement('h2','text-white','0',{id:`counter-${index}`});
+  const titleCounter = createHtmlElement('h5','fw-bold text-white  text-center',content);
 
    customAppendChild(divCounter_content , counterText);
    customAppendChild(divCounter_content,titleCounter); 
    customAppendChild(container_counters , divCounter_content);
    customAppendChild(main,container_counters);
-   console.log(container_counters);
-   console.log(main);
-
 }
 
 const RenderCounter=(counter , index)=>{
   
   let currentCount = 0;
-  const animationSpeed = 50;
+  const animationSpeed = 15;
   const intervalId=setInterval(()=>{
       if(currentCount < counter){
         currentCount++;
@@ -342,21 +329,7 @@ const RenderCounter=(counter , index)=>{
 }
 
  
-fetch({method:'GET',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',async:true,callback:renderListNews});
 
- let dataFetched = false;
-
-window.onscroll=()=>{
-  const sectionHeader=getElemnt('#sectionNews').getBoundingClientRect().top;
-
-  if (!dataFetched && sectionHeader < window.innerHeight) {
-    dataFetched = true;
-  fetch({method:'GET',url:'http://api.open-notify.org/astros.json',async:true,callback:RenderCounter,index:1});
-  fetch({method:'GET',url:'https://api.le-systeme-solaire.net/rest/bodies/',async:true,callback:RenderCounter,index:2});
-  fetch({method:'GET',url:'https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8',async:true,callback:RenderCounter,index:3})
-}
-
-}
 const renderRoute = () => {
   const main = document.querySelector("main");
   const hash = window.location.hash.replace("#", "") || "/";
@@ -376,3 +349,20 @@ const renderPage = () => {
 
 window.addEventListener("hashchange", renderRoute);
 renderPage();
+
+
+fetch({method:'GET',url:'https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/',async:true,callback:renderListNews});
+
+ let dataFetched = false;
+
+window.onscroll=()=>{
+  const sectionHeader=getElemnt('#sectionNews').getBoundingClientRect().top;
+
+  if (!dataFetched && sectionHeader < window.innerHeight) {
+    dataFetched = true;
+  fetch({method:'GET',url:'http://api.open-notify.org/astros.json',async:true,callback:RenderCounter,index:1});
+  fetch({method:'GET',url:'https://api.le-systeme-solaire.net/rest/bodies/',async:true,callback:RenderCounter,index:2});
+  fetch({method:'GET',url:'https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8',async:true,callback:RenderCounter,index:3})
+}
+
+}

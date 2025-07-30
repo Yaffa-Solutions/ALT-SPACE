@@ -29,3 +29,5 @@ const createHtmlElement = (
 const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
+
+const getElemnt=(elem)=> document.querySelector(elem);
