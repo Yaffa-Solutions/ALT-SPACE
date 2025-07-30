@@ -83,7 +83,7 @@ function showInputDialog({
     "dialog-box bg-dark text-light p-4 rounded shadow",
     "",
     {
-      style: "width: 320px; max-width: 90vw;",
+      style: "width: 370px; max-width: 90vw;",
     }
   );
 

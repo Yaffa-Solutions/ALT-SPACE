@@ -282,8 +282,99 @@ function renderAlbumMedia(index) {
   }
 
   items.forEach((item) => {
-    mediaGrid.appendChild(mediaCardElement(item));
+    mediaGrid.appendChild(mediaCardElement(item, index));
   });
+}
+
+function mediaCardElement(item, albumIndex) {
+  const col = createHtmlElement("div", "col-12 col-sm-6 col-md-4 col-lg-3");
+
+  const card = createHtmlElement(
+    "div",
+    "card card-hover-effect bg-dark text-light h-100 border-secondary"
+  );
+
+  const mediaWrapper = createHtmlElement("div", "position-relative", "", {
+    style: "height: 180px; overflow: hidden;",
+  });
+
+  const mediaThumb = createHtmlElement(
+    "img",
+    "w-100 h-100 object-fit-cover",
+    "",
+    {
+      src: item.thumb,
+      alt: item.title,
+      loading: "lazy",
+    }
+  );
+
+  const badgeWrapper = createHtmlElement(
+    "div",
+    "position-absolute top-0 end-0 m-2"
+  );
+
+  const badge = createHtmlElement(
+    "span",
+    `badge ${
+      item.type === "image"
+        ? "bg-primary"
+        : item.type === "video"
+        ? "bg-danger"
+        : "bg-info"
+    }`,
+    item.type
+  );
+
+  const cardBody = createHtmlElement("div", "card-body d-flex flex-column");
+  const title = createHtmlElement(
+    "h5",
+    "card-title text-primary fs-6",
+    item.title
+  );
+
+  const actionWrapper = createHtmlElement("div", "mt-auto");
+  const btnGroup = createHtmlElement(
+    "div",
+    "d-flex justify-content-between align-items-center"
+  );
+
+  const viewBtn = createHtmlElement("a", "btn btn-sm btn-outline-info", "", {
+    href: `#/detail/${item.id}`,
+  });
+  viewBtn.innerHTML = `<i class="fas fa-expand me-1"></i> View`;
+
+  const removeBtn = createHtmlElement(
+    "button",
+    "btn btn-sm btn-outline-danger remove-from-album-btn",
+    "",
+    {},
+    {
+      click: () => {
+        let albums = getAlbums();
+        albums[albumIndex].items = albums[albumIndex].items.filter(
+          (i) => i.id !== item.id
+        );
+        localStorage.setItem("albums", JSON.stringify(albums));
+
+        renderAlbumMedia(albumIndex);
+        renderAlbumsGrid();
+
+        showToast("Item removed from album", "warning");
+      },
+    }
+  );
+  removeBtn.innerHTML = `<i class="fas fa-times me-1"></i> Remove`;
+
+  customAppendChild(badgeWrapper, badge);
+  customAppendChild(mediaWrapper, mediaThumb, badgeWrapper);
+  customAppendChild(btnGroup, viewBtn, removeBtn);
+  customAppendChild(actionWrapper, btnGroup);
+  customAppendChild(cardBody, title, actionWrapper);
+  customAppendChild(card, mediaWrapper, cardBody);
+  col.appendChild(card);
+
+  return col;
 }
 
 function deleteAlbum(index) {
