@@ -52,7 +52,7 @@ const fetchDataWithXHR = (url, onSuccess, onError, method) => {
   xhr.send();
 };
 
-function showToast(message, type = "info") {
+const showToast = (message, type = "info") => {
   const toast = createHtmlElement(
     "div",
     `toast show align-items-center text-white bg-${type} border-0`,
@@ -84,14 +84,14 @@ function showToast(message, type = "info") {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 300);
   }, 3000);
-}
+};
 
-function showInputDialog({
+const showInputDialog = ({
   title = "Enter input",
   placeholder = "",
   onConfirm,
   onCancel,
-}) {
+}) => {
   const overlay = createHtmlElement("div", "dialog-overlay", "", {
     style: `
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -156,9 +156,13 @@ function showInputDialog({
   customAppendChild(dialog, titleEl, input, btnContainer);
   customAppendChild(overlay, dialog);
   customAppendChild(document.body, overlay);
-}
+};
 
-function showConfirmDialog({ message = "Are you sure?", onConfirm, onCancel }) {
+const showConfirmDialog = ({
+  message = "Are you sure?",
+  onConfirm,
+  onCancel,
+}) => {
   const overlay = createHtmlElement("div", "dialog-overlay", "", {
     style: `
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -213,4 +217,24 @@ function showConfirmDialog({ message = "Are you sure?", onConfirm, onCancel }) {
   customAppendChild(dialog, msgEl, btnContainer);
   customAppendChild(overlay, dialog);
   customAppendChild(document.body, overlay);
-}
+};
+
+const renderDetailError = () => {
+  const icon = createHtmlElement("i", "fas fa-exclamation-triangle fs-1 mb-3");
+  const heading = createHtmlElement("h2", "h4", "Failed to load media details");
+  const paragraph = createHtmlElement("p", "mb-0", "Please try again later");
+
+  const cardBody = createHtmlElement("div", "card-body text-center py-5");
+  customAppendChild(cardBody, icon, heading, paragraph);
+
+  const card = createHtmlElement(
+    "div",
+    "card bg-dark text-danger border-danger",
+    null,
+    cardBody
+  );
+  const container = createHtmlElement("div", "container py-5", null, card);
+
+  app.innerHTML = "";
+  app.appendChild(container);
+};
