@@ -31,3 +31,25 @@ const customAppendChild = (parent, ...children) => {
 };
 
 const getElemnt=(elem)=> document.querySelector(elem);
+const fetchDataWithXHR = (url, onSuccess, onError, method) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open(method, url, true);
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState !== 4) return;
+
+    if (xhr.status === 200) {
+      try {
+        const data = JSON.parse(xhr.responseText);
+        onSuccess(data);
+      } catch (e) {
+        onError(e);
+      }
+    } else {
+      onError(new Error(`Request failed with status ${xhr.status}`));
+    }
+  };
+
+  xhr.send();
+};
+
