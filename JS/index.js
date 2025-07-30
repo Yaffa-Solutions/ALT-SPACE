@@ -688,21 +688,21 @@ const mediaCard = (item) => {
   viewLink.innerHTML = `<i class="fas fa-eye me-2"></i>View Details`;
 
   const favItem = createHtmlElement("li");
-
-  const favBtn = createHtmlElement("button", "dropdown-item favoriteBtn", "", {
-    "data-id": id,
-    "data-title": title,
-    "data-thumb": thumb,
-    "data-type": type,
-    "data-desc": desc,
-  });
-  favBtn.innerHTML = `
-    <i class="${isFav ? "fas" : "far"} fa-star me-2"></i>
-    ${isFav ? "Remove Favorite" : "Add Favorite"}
-  `;
+   favItem.innerHTML = `<a class="dropdown-item favoriteBtn" href="#" data-id="${id}" data-title="${title}" data-thumb="${thumb}" data-type="${type}" data-desc="${desc}"><i class="${isFav ? "fas" : "far"} fa-star me-2"></i>${isFav ? "Remove Favorite" : "Add Favorite"}</a>`;
+  // const favBtn = createHtmlElement("button", "dropdown-item favoriteBtn", "", {
+  //   "data-id": id,
+  //   "data-title": title,
+  //   "data-thumb": thumb,
+  //   "data-type": type,
+  //   "data-desc": desc,
+  // });
+  // favBtn.innerHTML = `
+  //   <i class="${isFav ? "fas" : "far"} fa-star me-2"></i>
+  //   ${isFav ? "Remove Favorite" : "Add Favorite"}
+  // `;
 
   customAppendChild(viewItem, viewLink);
-  customAppendChild(favItem, favBtn);
+  //customAppendChild(favItem, favBtn);
   customAppendChild(dropdownMenu, viewItem, favItem);
   customAppendChild(dropdownWrapper, dropdownBtn, dropdownMenu);
   customAppendChild(footerTop, yearBadge, dropdownWrapper);
