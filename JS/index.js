@@ -1177,7 +1177,7 @@ fetchData({
 let dataFetched = false;
 
 window.onscroll = () => {
-  const sectionHeader = getElemnt("#sectionNews").getBoundingClientRect().top;
+  const sectionHeader = getElemnt("#sectionNews");
 
   if (!dataFetched && sectionHeader < window.innerHeight) {
     dataFetched = true;
