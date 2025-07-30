@@ -110,71 +110,115 @@ const renderHeroSection = () => {
     "",
     {
       style: `
-          background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                      url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') 
-                      no-repeat center center/cover;
-          min-height: 80vh; display: flex; align-items: center; margin-top:100px
-        `,
+        background: linear-gradient(135deg, rgba(12, 5, 32, 0.9) 0%, rgba(36, 18, 95, 0.8) 50%, rgba(8, 3, 20, 0.9) 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        margin-top:70px
+      `,
     }
   );
 
+  const stars = createHtmlElement("div", "stars", "", {
+    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
+  });
+
+  const shootingStars = createHtmlElement("div", "shooting-stars", "", {
+    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
+  });
+
+  const nebula = createHtmlElement("div", "nebula", "", {
+    style: `
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      top: -25%;
+      left: -25%;
+      background: radial-gradient(circle at 30% 50%, 
+        rgba(94, 44, 237, 0.15) 0%, 
+        rgba(12, 5, 32, 0) 50%),
+      radial-gradient(circle at 70% 30%, 
+        rgba(255, 102, 0, 0.1) 0%, 
+        rgba(12, 5, 32, 0) 50%);
+      animation: rotateNebula 180s linear infinite;
+    `,
+  });
+
   const container = createHtmlElement(
     "div",
-    "container position-relative z-index-1"
+    "container position-relative z-index-3"
   );
 
   const title = createHtmlElement(
     "h1",
-    "display-3 fw-bold mb-4 gradient-text",
+    "display-3 fw-bold mb-4 cosmic-text",
     "Galactic Gallery"
   );
+
   const subtitle = createHtmlElement(
     "p",
-    "lead fs-2 text-light mb-5",
+    "lead fs-2 text-light mb-5 cosmic-subtitle",
     "Explore the cosmos through NASA's eyes"
   );
 
   const buttonsWrapper = createHtmlElement(
     "div",
-    "d-flex justify-content-center gap-4"
+    "d-flex flex-column flex-md-row justify-content-center gap-4"
   );
 
   const exploreBtn = createHtmlElement(
     "a",
-    "btn btn-primary btn-lg px-4 py-3 rounded-pill shadow-lg",
+    "btn btn-primary btn-lg px-4 py-3 rounded-pill cosmic-btn pulse-animation",
     "",
     {
       href: "#/search",
     }
   );
-  exploreBtn.innerHTML = `<i class="fas fa-search me-2"></i> Start Exploring`;
+  exploreBtn.innerHTML = `
+    <span class="btn-content">
+      <i class="fas fa-rocket me-2"></i> Start Exploring
+    </span>
+    <span class="btn-glow"></span>
+  `;
 
   const randomBtn = createHtmlElement(
     "a",
-    "btn btn-outline-light btn-lg px-4 py-3 rounded-pill shadow-lg",
+    "btn btn-outline-light btn-lg px-4 py-3 rounded-pill cosmic-btn",
     "",
     {
       href: "#/random",
     }
   );
-  randomBtn.innerHTML = `<i class="fas fa-random me-2"></i> Random Discovery`;
+  randomBtn.innerHTML = `
+    <span class="btn-content">
+      <i class="fas fa-meteor me-2"></i> Random Discovery
+    </span>
+    <span class="btn-glow"></span>
+  `;
 
-  const scrollIconWrapper = createHtmlElement(
-    "div",
-    "floating position-absolute bottom-0 start-50 translate-middle-x mb-5"
-  );
-  const scrollIcon = createHtmlElement(
-    "i",
-    "fas fa-chevron-down text-white fs-1"
-  );
+  const floatingPlanets = createHtmlElement("div", "floating-planets", "");
+  floatingPlanets.innerHTML = `
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
+    <div class="planet planet-3"></div>
+  `;
 
   customAppendChild(buttonsWrapper, exploreBtn, randomBtn);
   customAppendChild(container, title, subtitle, buttonsWrapper);
-  customAppendChild(scrollIconWrapper, scrollIcon);
-  customAppendChild(section, container, scrollIconWrapper);
+  customAppendChild(
+    section,
+    stars,
+    shootingStars,
+    nebula,
+    floatingPlanets,
+    container
+  );
 
   return section;
 };
+
 const renderFeaturesSection = () => {
   const section = createHtmlElement("section", "container py-5 mb-5");
   const row = createHtmlElement("div", "row g-5");
@@ -787,6 +831,62 @@ const mediaCard = (item) => {
     ${isFav ? "Remove Favorite" : "Add Favorite"}
   `;
 
+  const albumRow = createHtmlElement(
+    "div",
+    "d-flex gap-2 align-items-center mt-3"
+  );
+
+  const albumSelect = createHtmlElement(
+    "select",
+    "form-select form-select-sm",
+    "",
+    {
+      "aria-label": "Select album",
+    }
+  );
+
+  const albums = getAlbums();
+
+  if (albums.length === 0) {
+    const opt = createHtmlElement("option", "", "No albums found");
+    albumSelect.appendChild(opt);
+    albumSelect.disabled = true;
+  } else {
+    const defaultOpt = createHtmlElement("option", "", "Add to album...", {
+      selected: true,
+      disabled: true,
+    });
+    albumSelect.appendChild(defaultOpt);
+
+    albums.forEach((album, index) => {
+      const option = createHtmlElement("option", "", album.name, {
+        value: index,
+      });
+      albumSelect.appendChild(option);
+    });
+  }
+
+  albumSelect.addEventListener("change", (e) => {
+    const albums = getAlbums();
+
+    const selectedIndex = e.target.value;
+    const selectedAlbum = albums[selectedIndex];
+
+    if (!selectedAlbum) return;
+
+    if (selectedAlbum.items.some((i) => i.id === id)) {
+      showToast("Item already in album", "warning");
+      return;
+    }
+
+    selectedAlbum.items.push(itemObj);
+    localStorage.setItem("albums", JSON.stringify(albums));
+    showToast(`Added to "${selectedAlbum.name}"`, "success");
+    renderAlbumsGrid();
+  });
+
+  albumRow.appendChild(albumSelect);
+
   customAppendChild(viewItem, viewLink);
   customAppendChild(favItem, favBtn);
   customAppendChild(dropdownMenu, viewItem, favItem);
@@ -794,12 +894,22 @@ const mediaCard = (item) => {
   customAppendChild(footerTop, yearBadge, dropdownWrapper);
 
   customAppendChild(footer, footerTop);
-  customAppendChild(cardBody, titleEl, descEl, footer);
+  customAppendChild(cardBody, titleEl, descEl, footer, albumRow);
   customAppendChild(card, imgWrapper, cardBody);
   customAppendChild(cardCol, card);
 
   return cardCol;
 };
+
+function renderAlbums() {
+  const main = document.querySelector("main");
+
+  main.appendChild(createAlbumHeroSection());
+  main.appendChild(createAlbumsContainer());
+  const grid = renderAlbumsGrid();
+  customAppendChild(main, grid);
+  main.appendChild(createAlbumMediaSection());
+}
 
 const renderRoute = () => {
   const main = document.querySelector("main");
@@ -811,6 +921,9 @@ const renderRoute = () => {
       renderSearchPage();
       break;
 
+    case "/albums":
+      renderAlbums();
+      break;
     default:
       renderHome();
       break;
