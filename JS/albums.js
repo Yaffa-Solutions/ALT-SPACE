@@ -8,13 +8,14 @@ const createAlbumHeroSection = () => {
         background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
         url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
         min-height: 300px;
+        margin-top:50px
       `,
     }
   );
 
   const container = createHtmlElement(
     "div",
-    "container position-relative z-index-1 py-5"
+    "container position-relative z-index-1 py-5 "
   );
   const row = createHtmlElement(
     "div",
