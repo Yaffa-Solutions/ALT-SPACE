@@ -1,4 +1,4 @@
-function createAlbumHeroSection() {
+const createAlbumHeroSection = () => {
   const section = createHtmlElement(
     "section",
     "album-hero position-relative py-5 mb-5",
@@ -49,9 +49,36 @@ function createAlbumHeroSection() {
   customAppendChild(section, container);
 
   return section;
-}
+};
 
-function createAlbumsContainer() {
+const createAlbumMediaSection = () => {
+  const section = createHtmlElement("div", "container mt-5", "", {
+    id: "albumMediaSection",
+    style: "display: none;",
+  });
+
+  const header = createHtmlElement(
+    "div",
+    "d-flex justify-content-between align-items-center mb-4"
+  );
+  const title = createHtmlElement("h2", "h4 fw-bold text-light mb-0", "", {
+    id: "currentAlbumTitle",
+  });
+  const count = createHtmlElement("div", "text-secondary small", "0 items", {
+    id: "albumItemsCount",
+  });
+
+  const grid = createHtmlElement("div", "row g-4", "", {
+    id: "albumMedia",
+  });
+
+  customAppendChild(header, title, count);
+  customAppendChild(section, header, grid);
+
+  return section;
+};
+
+const createAlbumsContainer = () => {
   const section = createHtmlElement("section", "container mb-5");
 
   const header = createHtmlElement(
@@ -100,12 +127,12 @@ function createAlbumsContainer() {
   customAppendChild(mediaHeader, currentTitle, itemsCount);
   customAppendChild(mediaSection, mediaHeader, mediaGrid);
   customAppendChild(header, title, count);
-  customAppendChild(section, header, grid, mediaSection);
+  customAppendChild(section, header, grid);
 
   return section;
-}
+};
 
-function handleCreateAlbum() {
+const handleCreateAlbum = () => {
   showInputDialog({
     title: "Enter album name:",
     placeholder: "Album name",
@@ -130,9 +157,9 @@ function handleCreateAlbum() {
       showToast(`"${name}" album created!`, "success");
     },
   });
-}
+};
 
-function renderAlbumsGrid() {
+const renderAlbumsGrid = () => {
   const albumsGrid = document.getElementById("albumsGrid");
   albumsGrid.innerHTML = "";
 
@@ -167,9 +194,9 @@ function renderAlbumsGrid() {
     albumsGrid.appendChild(createAlbumCard(album, index));
   });
   return albumsGrid;
-}
+};
 
-function createAlbumCard(album, index) {
+const createAlbumCard = (album, index) => {
   const { name, items, created, cover } = album;
 
   const col = createHtmlElement("div", "col-12 col-sm-6 col-md-4 col-lg-3");
@@ -244,9 +271,9 @@ function createAlbumCard(album, index) {
   customAppendChild(col, card);
 
   return col;
-}
+};
 
-function renderAlbumMedia(index) {
+const renderAlbumMedia = (index) => {
   const album = getAlbums()[index];
   const { name, items } = album;
 
@@ -284,9 +311,9 @@ function renderAlbumMedia(index) {
   items.forEach((item) => {
     mediaGrid.appendChild(mediaCardElement(item, index));
   });
-}
+};
 
-function mediaCardElement(item, albumIndex) {
+const mediaCardElement = (item, albumIndex) => {
   const col = createHtmlElement("div", "col-12 col-sm-6 col-md-4 col-lg-3");
 
   const card = createHtmlElement(
@@ -375,21 +402,21 @@ function mediaCardElement(item, albumIndex) {
   col.appendChild(card);
 
   return col;
-}
+};
 
-function deleteAlbum(index) {
+const deleteAlbum = (index) => {
   const albums = getAlbums();
   albums.splice(index, 1);
   localStorage.setItem("albums", JSON.stringify(albums));
   renderAlbumsGrid();
   showToast("Album deleted", "danger");
-}
+};
 
-function getAlbums() {
+const getAlbums = () => {
   return JSON.parse(localStorage.getItem("albums") || "[]");
-}
+};
 
-function getRandomSpaceImage() {
+const getRandomSpaceImage = () => {
   const images = [
     "photo-1462331940025-496dfbfc7564",
     "photo-1454789548928-9efd52dc4031",
@@ -400,4 +427,4 @@ function getRandomSpaceImage() {
   ];
   const id = images[Math.floor(Math.random() * images.length)];
   return `https://images.unsplash.com/${id}?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80`;
-}
+};

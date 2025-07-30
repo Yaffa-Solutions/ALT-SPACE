@@ -116,6 +116,7 @@ const renderHeroSection = () => {
         align-items: center;
         position: relative;
         overflow: hidden;
+        margin-top:70px
       `,
     }
   );
@@ -744,6 +745,62 @@ const mediaCard = (item) => {
     ${isFav ? "Remove Favorite" : "Add Favorite"}
   `;
 
+  const albumRow = createHtmlElement(
+    "div",
+    "d-flex gap-2 align-items-center mt-3"
+  );
+
+  const albumSelect = createHtmlElement(
+    "select",
+    "form-select form-select-sm",
+    "",
+    {
+      "aria-label": "Select album",
+    }
+  );
+
+  const albums = getAlbums();
+
+  if (albums.length === 0) {
+    const opt = createHtmlElement("option", "", "No albums found");
+    albumSelect.appendChild(opt);
+    albumSelect.disabled = true;
+  } else {
+    const defaultOpt = createHtmlElement("option", "", "Add to album...", {
+      selected: true,
+      disabled: true,
+    });
+    albumSelect.appendChild(defaultOpt);
+
+    albums.forEach((album, index) => {
+      const option = createHtmlElement("option", "", album.name, {
+        value: index,
+      });
+      albumSelect.appendChild(option);
+    });
+  }
+
+  albumSelect.addEventListener("change", (e) => {
+    const albums = getAlbums();
+
+    const selectedIndex = e.target.value;
+    const selectedAlbum = albums[selectedIndex];
+
+    if (!selectedAlbum) return;
+
+    if (selectedAlbum.items.some((i) => i.id === id)) {
+      showToast("Item already in album", "warning");
+      return;
+    }
+
+    selectedAlbum.items.push(itemObj);
+    localStorage.setItem("albums", JSON.stringify(albums));
+    showToast(`Added to "${selectedAlbum.name}"`, "success");
+    renderAlbumsGrid();
+  });
+
+  albumRow.appendChild(albumSelect);
+
   customAppendChild(viewItem, viewLink);
   customAppendChild(favItem, favBtn);
   customAppendChild(dropdownMenu, viewItem, favItem);
@@ -751,7 +808,7 @@ const mediaCard = (item) => {
   customAppendChild(footerTop, yearBadge, dropdownWrapper);
 
   customAppendChild(footer, footerTop);
-  customAppendChild(cardBody, titleEl, descEl, footer);
+  customAppendChild(cardBody, titleEl, descEl, footer, albumRow);
   customAppendChild(card, imgWrapper, cardBody);
   customAppendChild(cardCol, card);
 
@@ -765,6 +822,7 @@ function renderAlbums() {
   main.appendChild(createAlbumsContainer());
   const grid = renderAlbumsGrid();
   customAppendChild(main, grid);
+  main.appendChild(createAlbumMediaSection());
 }
 
 const renderRoute = () => {
