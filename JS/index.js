@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.body.prepend(renderNavbar());
   renderHome();
-  fetchFactsForSameDay();
 });
 
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
@@ -905,6 +904,10 @@ const renderRoute = () => {
     case "/albums":
       renderAlbums();
       break;
+    case "/random":
+      fetchFactsForSameDay();
+      break;
+      
     default:
       renderHome();
       break;
