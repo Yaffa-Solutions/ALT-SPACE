@@ -30,6 +30,7 @@ const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
 
+const getElemnt=(elem)=> document.querySelector(elem);
 const fetchDataWithXHR = (url, onSuccess, onError, method) => {
   const xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
@@ -214,3 +215,4 @@ function showConfirmDialog({ message = "Are you sure?", onConfirm, onCancel }) {
   customAppendChild(overlay, dialog);
   customAppendChild(document.body, overlay);
 }
+
