@@ -30,9 +30,9 @@ const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
 
-const fetchDataWithXHR = (url, onSuccess, onError) => {
+const fetchDataWithXHR = (url, onSuccess, onError, method) => {
   const xhr = new XMLHttpRequest();
-  xhr.open("GET", url, true);
+  xhr.open(method, url, true);
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState !== 4) return;

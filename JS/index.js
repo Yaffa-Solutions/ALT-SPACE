@@ -570,7 +570,8 @@ const renderSearchResults = (url, append = false) => {
       customAppendChild(resultsDiv, errorCol);
 
       loadMoreBtn.style.display = "none";
-    }
+    },
+    "GET"
   );
 };
 
