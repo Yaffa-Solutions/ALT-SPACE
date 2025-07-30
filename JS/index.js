@@ -1,7 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.body.prepend(renderNavbar());
   renderHome();
-
+ renderInitialCounter('Number of astronauts');
+   renderInitialCounter('Number of bodies');
+   renderInitialCounter('Number of flares');
 });
 
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
@@ -335,7 +337,8 @@ const renderListNews = (lst) => {
   
   const main = getElemnt('#app'); 
 
-  const sectionHerader_card= createHtmlElement('section','','',{id:"sectionNews"});
+  const sectionHerader_card= createHtmlElement('section','','');
+  sectionHerader_card.id = 'sectionNews';
   const sectionHeader = createHtmlElement('div', 'd-flex justify-content-between align-items-center mb-4');
   const container_cards = createHtmlElement('section','row justify-content-center');
   const sectionTitle = createHtmlElement('h2', 'fw-bold text-white py-4 m-0 text-start', '📡 Space News');
@@ -378,11 +381,9 @@ const renderListNews = (lst) => {
   customAppendChild(sectionHerader_card , sectionHeader);
   customAppendChild(sectionHerader_card , container_cards);
   customAppendChild(main, sectionHerader_card);
-   renderInitialCounter('Number of astronauts');
-   renderInitialCounter('Number of bodies');
-   renderInitialCounter('Number of flares');
-};
+     
 
+};
 
 
 let index = 0;
@@ -399,6 +400,7 @@ const renderInitialCounter=(content)=>{
    customAppendChild(divCounter_content,titleCounter); 
    customAppendChild(container_counters , divCounter_content);
    customAppendChild(main,container_counters);
+
 }
 
 const RenderCounter=(counter , index)=>{
@@ -864,21 +866,21 @@ const mediaCard = (item) => {
   viewLink.innerHTML = `<i class="fas fa-eye me-2"></i>View Details`;
 
   const favItem = createHtmlElement("li");
-   favItem.innerHTML = `<a class="dropdown-item favoriteBtn" href="#" data-id="${id}" data-title="${title}" data-thumb="${thumb}" data-type="${type}" data-desc="${desc}"><i class="${isFav ? "fas" : "far"} fa-star me-2"></i>${isFav ? "Remove Favorite" : "Add Favorite"}</a>`;
-  // const favBtn = createHtmlElement("button", "dropdown-item favoriteBtn", "", {
-  //   "data-id": id,
-  //   "data-title": title,
-  //   "data-thumb": thumb,
-  //   "data-type": type,
-  //   "data-desc": desc,
-  // });
-  // favBtn.innerHTML = `
-  //   <i class="${isFav ? "fas" : "far"} fa-star me-2"></i>
-  //   ${isFav ? "Remove Favorite" : "Add Favorite"}
-  // `;
+   //favItem.innerHTML = `<a class="dropdown-item favoriteBtn" href="#" data-id="${id}" data-title="${title}" data-thumb="${thumb}" data-type="${type}" data-desc="${desc}"><i class="${isFav ? "fas" : "far"} fa-star me-2"></i>${isFav ? "Remove Favorite" : "Add Favorite"}</a>`;
+  const favBtn = createHtmlElement("button", "dropdown-item favoriteBtn", "", {
+    "data-id": id,
+    "data-title": title,
+    "data-thumb": thumb,
+    "data-type": type,
+    "data-desc": desc,
+  });
+  favBtn.innerHTML = `
+    <i class="${isFav ? "fas" : "far"} fa-star me-2"></i>
+    ${isFav ? "Remove Favorite" : "Add Favorite"}
+  `;
 
   customAppendChild(viewItem, viewLink);
-  //customAppendChild(favItem, favBtn);
+  customAppendChild(favItem, favBtn);
   customAppendChild(dropdownMenu, viewItem, favItem);
   customAppendChild(dropdownWrapper, dropdownBtn, dropdownMenu);
   customAppendChild(footerTop, yearBadge, dropdownWrapper);
