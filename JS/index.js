@@ -114,7 +114,6 @@ window.onscroll=()=>{
   fetch({method:'GET',url:'https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8',async:true,callback:RenderCounter,index:3})
 }
   }
- 
 
 }
 
@@ -936,4 +935,3 @@ const renderPage = () => {
 
 window.addEventListener("hashchange", renderRoute);
 renderPage();
-
