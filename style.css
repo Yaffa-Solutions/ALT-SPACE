@@ -251,6 +251,27 @@ body {
   animation: float 18s ease-in-out infinite;
   animation-delay: 2s;
 }
+/* للزر */
+.toggle-btn {
+  background: none;
+  border: none;
+  color: #0d6efd; /* نفس لون البوتستراب الأزرق الأساسي */
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9rem;
+  padding: 0;
+}
+
+/* نص الوصف المقيد */
+.clamped-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.3s ease;
+}
+
 
 @keyframes pulse {
   0% {

@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   document.body.prepend(renderNavbar());
   renderHome();
-
+  fetchFactsForSameDay();
 });
 
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
