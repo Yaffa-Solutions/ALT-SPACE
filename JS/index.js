@@ -6,7 +6,12 @@ const renderHome = () => {
   let main = document.querySelector("main");
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
-  fetchData(News_API, renderListNews);
+  fetchDataWithXHR(
+    News_API,
+    (data) => renderListNews(data),
+    (error) => console.log(error),
+    "GET"
+  );
 };
 
 const renderNavbar = () => {
@@ -358,10 +363,9 @@ const renderListNews = (lst) => {
       countLst = 6;
     }
     showAll = !showAll;
-    renderListNews(lst);
   };
 
-  lst.slice(0, countLst).forEach((i) => {
+  lst.items.slice(0, countLst).forEach((i) => {
     const col = createHtmlElement("div", "col-12 col-md-4  mb-4 d-flex");
     const card = createHtmlElement(
       "div",
@@ -381,7 +385,10 @@ const renderListNews = (lst) => {
       "a",
       "btn btn-outline-primary mt-auto align-self-start",
       "Read More",
-      { href: i.link }
+      {
+        href: i.link,
+        target: "_blank",
+      }
     );
     const title = createHtmlElement("h5", "fw-bold", `${i.title}`);
     const description = createHtmlElement(
@@ -416,39 +423,39 @@ const container_counters = createHtmlElement(
   "section",
   "d-flex justify-content-center gap-4 flex-wrap p-2 mt-100"
 );
-const renderInitialCounter = (content) => {
-  index += 1;
-  const divCounter_content = createHtmlElement(
-    "div",
-    "d-flex flex-column align-items-center justify-content-center text-center p-3"
-  );
-  const counterText = createHtmlElement("h2", "text-white", "0", {
-    id: `counter-${index}`,
-  });
-  const titleCounter = createHtmlElement(
-    "h5",
-    "fw-bold text-white  text-center",
-    content
-  );
+// const renderInitialCounter = (content) => {
+//   index += 1;
+//   const divCounter_content = createHtmlElement(
+//     "div",
+//     "d-flex flex-column align-items-center justify-content-center text-center p-3"
+//   );
+//   const counterText = createHtmlElement("h2", "text-white", "0", {
+//     id: `counter-${index}`,
+//   });
+//   const titleCounter = createHtmlElement(
+//     "h5",
+//     "fw-bold text-white  text-center",
+//     content
+//   );
 
-  customAppendChild(divCounter_content, counterText);
-  customAppendChild(divCounter_content, titleCounter);
-  customAppendChild(container_counters, divCounter_content);
-  customAppendChild(main, container_counters);
-};
+//   customAppendChild(divCounter_content, counterText);
+//   customAppendChild(divCounter_content, titleCounter);
+//   customAppendChild(container_counters, divCounter_content);
+//   customAppendChild(main, container_counters);
+// };
 
-const RenderCounter = (counter, index) => {
-  let currentCount = 0;
-  const animationSpeed = 15;
-  const intervalId = setInterval(() => {
-    if (currentCount < counter) {
-      currentCount++;
-      getElemnt(`#counter-${index}`).textContent = currentCount;
-    } else {
-      clearInterval(intervalId);
-    }
-  }, animationSpeed);
-};
+// const RenderCounter = (counter, index) => {
+//   let currentCount = 0;
+//   const animationSpeed = 15;
+//   const intervalId = setInterval(() => {
+//     if (currentCount < counter) {
+//       currentCount++;
+//       getElemnt(`#counter-${index}`).textContent = currentCount;
+//     } else {
+//       clearInterval(intervalId);
+//     }
+//   }, animationSpeed);
+// };
 
 const fetchSearchResults = async (searchState) => {
   const { q, mediaType, year } = searchState;
@@ -900,20 +907,61 @@ const mediaCard = (item) => {
   favItem.innerHTML = `<a class="dropdown-item favoriteBtn" href="#" data-id="${id}" data-title="${title}" data-thumb="${thumb}" data-type="${type}" data-desc="${desc}"><i class="${
     isFav ? "fas" : "far"
   } fa-star me-2"></i>${isFav ? "Remove Favorite" : "Add Favorite"}</a>`;
-  // const favBtn = createHtmlElement("button", "dropdown-item favoriteBtn", "", {
-  //   "data-id": id,
-  //   "data-title": title,
-  //   "data-thumb": thumb,
-  //   "data-type": type,
-  //   "data-desc": desc,
-  // });
-  // favBtn.innerHTML = `
-  //   <i class="${isFav ? "fas" : "far"} fa-star me-2"></i>
-  //   ${isFav ? "Remove Favorite" : "Add Favorite"}
-  // `;
+  const albumRow = createHtmlElement(
+    "div",
+    "d-flex gap-2 align-items-center mt-3"
+  );
+
+  const albumSelect = createHtmlElement(
+    "select",
+    "form-select form-select-sm",
+    "",
+    {
+      "aria-label": "Select album",
+    }
+  );
+
+  const albums = getAlbums();
+
+  if (albums.length === 0) {
+    const opt = createHtmlElement("option", "", "No albums found");
+    albumSelect.appendChild(opt);
+    albumSelect.disabled = true;
+  } else {
+    const defaultOpt = createHtmlElement("option", "", "Add to album...", {
+      selected: true,
+      disabled: true,
+    });
+    albumSelect.appendChild(defaultOpt);
+
+    albums.forEach((album, index) => {
+      const option = createHtmlElement("option", "", album.name, {
+        value: index,
+      });
+      albumSelect.appendChild(option);
+    });
+  }
+
+  albumSelect.addEventListener("change", (e) => {
+    const selectedIndex = e.target.value;
+    const selectedAlbum = albums[selectedIndex];
+
+    if (!selectedAlbum) return;
+
+    if (selectedAlbum.items.some((i) => i.id === id)) {
+      showToast("Item already in album", "warning");
+      return;
+    }
+
+    selectedAlbum.items.push(itemObj);
+    localStorage.setItem("albums", JSON.stringify(albums));
+    showToast(`Added to ${selectedAlbum.name}`, "success");
+    renderAlbumsGrid();
+  });
+
+  albumRow.appendChild(albumSelect);
 
   customAppendChild(viewItem, viewLink);
-  //customAppendChild(favItem, favBtn);
   customAppendChild(dropdownMenu, viewItem, favItem);
   customAppendChild(dropdownWrapper, dropdownBtn, dropdownMenu);
   customAppendChild(footerTop, yearBadge, dropdownWrapper);
@@ -1167,40 +1215,31 @@ const renderPage = () => {
 window.addEventListener("hashchange", renderRoute);
 renderPage();
 
-fetchData({
-  method: "GET",
-  url: "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/",
-  async: true,
-  callback: renderListNews,
-});
+// window.onscroll = () => {
+//   const sectionHeader = getElemnt("#sectionNews");
 
-let dataFetched = false;
-
-window.onscroll = () => {
-  const sectionHeader = getElemnt("#sectionNews");
-
-  if (!dataFetched && sectionHeader < window.innerHeight) {
-    dataFetched = true;
-    fetchData({
-      method: "GET",
-      url: "http://api.open-notify.org/astros.json",
-      async: true,
-      callback: RenderCounter,
-      index: 1,
-    });
-    fetchData({
-      method: "GET",
-      url: "https://api.le-systeme-solaire.net/rest/bodies/",
-      async: true,
-      callback: RenderCounter,
-      index: 2,
-    });
-    fetchData({
-      method: "GET",
-      url: "https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8",
-      async: true,
-      callback: RenderCounter,
-      index: 3,
-    });
-  }
-};
+//   if (!dataFetched && sectionHeader < window.innerHeight) {
+//     dataFetched = true;
+//     fetchData({
+//       method: "GET",
+//       url: "http://api.open-notify.org/astros.json",
+//       async: true,
+//       callback: RenderCounter,
+//       index: 1,
+//     });
+//     fetchData({
+//       method: "GET",
+//       url: "https://api.le-systeme-solaire.net/rest/bodies/",
+//       async: true,
+//       callback: RenderCounter,
+//       index: 2,
+//     });
+//     fetchData({
+//       method: "GET",
+//       url: "https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8",
+//       async: true,
+//       callback: RenderCounter,
+//       index: 3,
+//     });
+//   }
+// };

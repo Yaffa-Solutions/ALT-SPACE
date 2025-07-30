@@ -31,6 +31,8 @@ const customAppendChild = (parent, ...children) => {
 };
 
 const getElemnt=(elem)=> document.querySelector(elem);
+
+
 const fetchDataWithXHR = (url, onSuccess, onError, method) => {
   const xhr = new XMLHttpRequest();
   xhr.open(method, url, true);
