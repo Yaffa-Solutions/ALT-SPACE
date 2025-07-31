@@ -1,14 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.prepend(renderNavbar());
-  renderHome();
-});
-
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
 const News_API =
   "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/";
 
 const renderHome = () => {
   let main = document.querySelector("main");
+  main.innerHTML = "";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
   fetchDataWithXHR(
@@ -1311,7 +1307,7 @@ const renderRoute = () => {
     case "/random":
       fetchFactsForSameDay();
       break;
-      
+
     default:
       renderHome();
       break;
@@ -1325,32 +1321,3 @@ const renderPage = () => {
 
 window.addEventListener("hashchange", renderRoute);
 renderPage();
-
-// window.onscroll = () => {
-//   const sectionHeader = getElemnt("#sectionNews");
-
-//   if (!dataFetched && sectionHeader < window.innerHeight) {
-//     dataFetched = true;
-//     fetchData({
-//       method: "GET",
-//       url: "http://api.open-notify.org/astros.json",
-//       async: true,
-//       callback: RenderCounter,
-//       index: 1,
-//     });
-//     fetchData({
-//       method: "GET",
-//       url: "https://api.le-systeme-solaire.net/rest/bodies/",
-//       async: true,
-//       callback: RenderCounter,
-//       index: 2,
-//     });
-//     fetchData({
-//       method: "GET",
-//       url: "https://api.nasa.gov/DONKI/FLR?startDate=2024-01-01&endDate=2024-01-31&api_key=IiXIh24lEiBsGC0fzOEjuVdezSV84o4ZaM1bVOY8",
-//       async: true,
-//       callback: RenderCounter,
-//       index: 3,
-//     });
-//   }
-// };
