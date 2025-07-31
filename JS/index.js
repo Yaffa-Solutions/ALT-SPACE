@@ -9,6 +9,7 @@ const News_API =
 
 const renderHome = () => {
   let main = document.querySelector("main");
+  main.innerHTML = "";
   main.appendChild(renderHeroSection());
   main.appendChild(renderFeaturesSection());
   fetchDataWithXHR(
@@ -1311,7 +1312,7 @@ const renderRoute = () => {
     case "/random":
       fetchFactsForSameDay();
       break;
-      
+
     default:
       renderHome();
       break;
