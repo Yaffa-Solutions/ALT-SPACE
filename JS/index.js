@@ -184,7 +184,7 @@ const renderHeroSection = () => {
 
   const exploreBtn = createHtmlElement(
     "a",
-    "btn btn-primary btn-lg px-4 py-3 rounded-pill cosmic-btn pulse-animation",
+    "btn btn-primary btn-lg px-4 py-3 rounded-pill cosmic-btn cosmic-btn-responsive pulse-animation",
     "",
     {
       href: "#/search",
