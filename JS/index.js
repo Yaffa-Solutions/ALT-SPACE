@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.prepend(renderNavbar());
+  renderHome();
+});
+
 const NASA_SEARCH_API = "https://images-api.nasa.gov/search";
 const News_API =
   "https://api.rss2json.com/v1/api.json?rss_url=https://www.nasa.gov/news-release/feed/";
@@ -1303,6 +1308,10 @@ const renderRoute = () => {
     case "/albums":
       renderAlbums();
       break;
+    case "/random":
+      fetchFactsForSameDay();
+      break;
+      
     default:
       renderHome();
       break;
