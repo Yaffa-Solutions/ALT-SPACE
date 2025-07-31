@@ -71,9 +71,7 @@ const renderNavbar = () => {
 
     const activeInd = createHtmlElement(
       "span",
-      "position-absolute bottom-0 start-0 end-0 mx-auto bg-primary",
-      "",
-      { style: "height: 2px; width: 0%; transition: width 0.3s ease;" }
+      "position-absolute activeInd bottom-0 start-0 end-0 mx-auto bg-primary"
     );
     customAppendChild(link, activeInd);
 
@@ -120,45 +118,14 @@ const renderNavbar = () => {
 const renderHeroSection = () => {
   const section = createHtmlElement(
     "section",
-    "hero-section position-relative overflow-hidden text-center py-5 mb-5",
-    "",
-    {
-      style: `
-        background: linear-gradient(135deg, rgba(12, 5, 32, 0.9) 0%, rgba(36, 18, 95, 0.8) 50%, rgba(8, 3, 20, 0.9) 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        margin-top:70px
-      `,
-    }
+    "hero-section position-relative overflow-hidden text-center py-5 mb-5"
   );
 
-  const stars = createHtmlElement("div", "stars", "", {
-    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
-  });
+  const stars = createHtmlElement("div", "stars", "");
 
-  const shootingStars = createHtmlElement("div", "shooting-stars", "", {
-    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
-  });
+  const shootingStars = createHtmlElement("div", "shooting-stars", "");
 
-  const nebula = createHtmlElement("div", "nebula", "", {
-    style: `
-      position: absolute;
-      width: 150%;
-      height: 150%;
-      top: -25%;
-      left: -25%;
-      background: radial-gradient(circle at 30% 50%, 
-        rgba(94, 44, 237, 0.15) 0%, 
-        rgba(12, 5, 32, 0) 50%),
-      radial-gradient(circle at 70% 30%, 
-        rgba(255, 102, 0, 0.1) 0%, 
-        rgba(12, 5, 32, 0) 50%);
-      animation: rotateNebula 180s linear infinite;
-    `,
-  });
+  const nebula = createHtmlElement("div", "nebula", "");
 
   const container = createHtmlElement(
     "div",
@@ -279,11 +246,7 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   const iconWrapper = createHtmlElement(
     "div",
-    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto",
-    "",
-    {
-      style: "width: 80px; height: 80px;",
-    }
+    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto"
   );
 
   const icon = createHtmlElement("i", `${iconClass} fs-3 text-primary`);
@@ -425,17 +388,7 @@ const fetchSearchResults = async (searchState) => {
 const renderSearchPage = () => {
   const hero = createHtmlElement(
     "section",
-    "search-hero   position-relative py-5 mb-5",
-    "",
-    {
-      style: `
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                  url('https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') 
-                  no-repeat center center/cover;
-      min-height: 300px;
-      margin-top:70px
-    `,
-    }
+    "search-hero   position-relative py-5 mb-5"
   );
 
   const container = createHtmlElement(
@@ -569,11 +522,10 @@ const renderSearchPage = () => {
 
   const loadMoreBtn = createHtmlElement(
     "button",
-    "btn btn-outline-primary",
+    "btn loadMoreBtn btn-outline-primary",
     "",
     {
       id: "loadMoreBtn",
-      style: "display: none;",
     }
   );
   loadMoreBtn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i> Load More`;
@@ -764,9 +716,7 @@ const mediaCard = (item) => {
 
   const card = createHtmlElement(
     "div",
-    "card card-hover-effect bg-dark text-light h-100 shadow border-secondary",
-    "",
-    { style: "position: relative;" }
+    "card media-card card-hover-effect bg-dark text-light h-100 shadow border-secondary"
   );
 
   const imgWrapper = createHtmlElement(
@@ -823,9 +773,7 @@ const mediaCard = (item) => {
     year
   );
 
-  const dropdownWrapper = createHtmlElement("div", "dropdown", "", {
-    style: "position: static;",
-  });
+  const dropdownWrapper = createHtmlElement("div", "dropdown dropdownWrapper");
 
   const dropdownBtn = createHtmlElement(
     "button",
@@ -844,12 +792,7 @@ const mediaCard = (item) => {
 
   const dropdownMenu = createHtmlElement(
     "ul",
-    "dropdown-menu dropdown-menu-dark dropdown-menu-end",
-    "",
-    {
-      "aria-label": "dropdownMenuButton",
-      style: "position: absolute; z-index: 9999;",
-    }
+    "dropdown-menu dropdown-menu-dark dropdown-menu-end"
   );
 
   const viewItem = createHtmlElement("li");
@@ -962,11 +905,7 @@ function renderFavorites() {
 
   const heroSection = createHtmlElement(
     "div",
-    "bg-primary text-white  text-center py-5 rounded-4 shadow-sm ",
-    "",
-    {
-      style: "margin-top: 50px; margin-bottom: 50px;",
-    }
+    "bg-primary  heroSection text-white  text-center py-5 rounded-4 shadow-sm "
   );
 
   const heroTitle = createHtmlElement(
@@ -1009,7 +948,6 @@ function renderFavorites() {
     const img = createHtmlElement("img", "card-img-top object-fit-cover", "", {
       src: fav.thumb,
       alt: fav.title,
-      style: "height: 220px; background: #111;",
       loading: "lazy",
     });
 
@@ -1102,11 +1040,7 @@ const renderDetailPage = (id) => {
 
   const spinner = createHtmlElement(
     "div",
-    "d-flex justify-content-center align-items-center ",
-    "",
-    {
-      style: "height: 100vh;",
-    }
+    "d-flex justify-content-center spinner align-items-center "
   );
   spinner.innerHTML = `
     <div class="spinner-border text-primary" role="status">
@@ -1116,7 +1050,6 @@ const renderDetailPage = (id) => {
 
   const mediaContainer = createHtmlElement("div", "position-relative ", "", {
     id: "mediaContainer",
-    style: "min-height: 500px; background: #111; margin-top:10px;",
   });
   mediaContainer.appendChild(spinner);
 
@@ -1313,15 +1246,7 @@ const getFavorites = () => {
 const renderCallToActionSection = () => {
   const section = createHtmlElement(
     "section",
-    "container-fluid py-5 mb-5  position-relative overflow-hidden",
-    "",
-    {
-      style: `
-        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
-                    url('https://images.unsplash.com/photo-1454789548928-9efd52dc4031?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') 
-                    no-repeat center center/cover; margin-top:90px;
-      `,
-    }
+    "container-fluid py-5 mb-5 ActionSection position-relative overflow-hidden"
   );
 
   const container = createHtmlElement("div", "container text-center py-5");
