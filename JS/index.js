@@ -8,8 +8,14 @@ const renderHome = () => {
   main.appendChild(renderFeaturesSection());
   fetchDataWithXHR(
     News_API,
-    (data) => renderListNews(data),
-    (error) => console.log(error),
+    (data) => {
+      renderListNews(data.items);
+      main.appendChild(renderCallToActionSection());
+    },
+    (error) => {
+      console.log(error);
+      main.appendChild(renderCallToActionSection());
+    },
     "GET"
   );
 };
@@ -65,9 +71,7 @@ const renderNavbar = () => {
 
     const activeInd = createHtmlElement(
       "span",
-      "position-absolute bottom-0 start-0 end-0 mx-auto bg-primary",
-      "",
-      { style: "height: 2px; width: 0%; transition: width 0.3s ease;" }
+      "position-absolute activeInd bottom-0 start-0 end-0 mx-auto bg-primary"
     );
     customAppendChild(link, activeInd);
 
@@ -114,45 +118,14 @@ const renderNavbar = () => {
 const renderHeroSection = () => {
   const section = createHtmlElement(
     "section",
-    "hero-section position-relative overflow-hidden text-center py-5 mb-5",
-    "",
-    {
-      style: `
-        background: linear-gradient(135deg, rgba(12, 5, 32, 0.9) 0%, rgba(36, 18, 95, 0.8) 50%, rgba(8, 3, 20, 0.9) 100%);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-        margin-top:70px
-      `,
-    }
+    "hero-section position-relative overflow-hidden text-center py-5 mb-5"
   );
 
-  const stars = createHtmlElement("div", "stars", "", {
-    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
-  });
+  const stars = createHtmlElement("div", "stars", "");
 
-  const shootingStars = createHtmlElement("div", "shooting-stars", "", {
-    style: "position: absolute; top: 0; left: 0; width: 100%; height: 100%;",
-  });
+  const shootingStars = createHtmlElement("div", "shooting-stars", "");
 
-  const nebula = createHtmlElement("div", "nebula", "", {
-    style: `
-      position: absolute;
-      width: 150%;
-      height: 150%;
-      top: -25%;
-      left: -25%;
-      background: radial-gradient(circle at 30% 50%, 
-        rgba(94, 44, 237, 0.15) 0%, 
-        rgba(12, 5, 32, 0) 50%),
-      radial-gradient(circle at 70% 30%, 
-        rgba(255, 102, 0, 0.1) 0%, 
-        rgba(12, 5, 32, 0) 50%);
-      animation: rotateNebula 180s linear infinite;
-    `,
-  });
+  const nebula = createHtmlElement("div", "nebula", "");
 
   const container = createHtmlElement(
     "div",
@@ -178,7 +151,7 @@ const renderHeroSection = () => {
 
   const exploreBtn = createHtmlElement(
     "a",
-    "btn btn-primary btn-lg px-4 py-3 rounded-pill cosmic-btn pulse-animation",
+    "btn btn-primary btn-lg px-4 py-3 rounded-pill cosmic-btn cosmic-btn-responsive pulse-animation",
     "",
     {
       href: "#/search",
@@ -273,11 +246,7 @@ const renderFeatureCard = (iconClass, title, description) => {
 
   const iconWrapper = createHtmlElement(
     "div",
-    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto",
-    "",
-    {
-      style: "width: 80px; height: 80px;",
-    }
+    "icon-wrapper bg-primary bg-opacity-10 rounded-circle p-4 mb-4 mx-auto"
   );
 
   const icon = createHtmlElement("i", `${iconClass} fs-3 text-primary`);
@@ -347,25 +316,11 @@ const renderListNews = (lst) => {
     "fw-bold text-white py-4 m-0 text-start",
     "📡 Space News"
   );
-  const viewMoreBtn = createHtmlElement(
-    "button",
-    "btn btn-outline-info",
-    showAll ? " View More" : "View less"
-  );
+
   customAppendChild(sectionHeader, sectionTitle);
-  customAppendChild(sectionHeader, viewMoreBtn);
+  customAppendChild(sectionHeader);
 
-  viewMoreBtn.onclick = () => {
-    getElemnt("#sectionNews").remove();
-    if (showAll) {
-      countLst = lst.length;
-    } else {
-      countLst = 6;
-    }
-    showAll = !showAll;
-  };
-
-  lst.items.slice(0, countLst).forEach((i) => {
+  lst.slice(0, countLst).forEach((i) => {
     const col = createHtmlElement("div", "col-12 col-md-4  mb-4 d-flex");
     const card = createHtmlElement(
       "div",
@@ -411,9 +366,6 @@ const renderListNews = (lst) => {
   customAppendChild(sectionHerader_card, sectionHeader);
   customAppendChild(sectionHerader_card, container_cards);
   customAppendChild(main, sectionHerader_card);
-  renderInitialCounter("Number of astronauts");
-  renderInitialCounter("Number of bodies");
-  renderInitialCounter("Number of flares");
 };
 
 let index = 0;
@@ -423,39 +375,6 @@ const container_counters = createHtmlElement(
   "section",
   "d-flex justify-content-center gap-4 flex-wrap p-2 mt-100"
 );
-// const renderInitialCounter = (content) => {
-//   index += 1;
-//   const divCounter_content = createHtmlElement(
-//     "div",
-//     "d-flex flex-column align-items-center justify-content-center text-center p-3"
-//   );
-//   const counterText = createHtmlElement("h2", "text-white", "0", {
-//     id: `counter-${index}`,
-//   });
-//   const titleCounter = createHtmlElement(
-//     "h5",
-//     "fw-bold text-white  text-center",
-//     content
-//   );
-
-//   customAppendChild(divCounter_content, counterText);
-//   customAppendChild(divCounter_content, titleCounter);
-//   customAppendChild(container_counters, divCounter_content);
-//   customAppendChild(main, container_counters);
-// };
-
-// const RenderCounter = (counter, index) => {
-//   let currentCount = 0;
-//   const animationSpeed = 15;
-//   const intervalId = setInterval(() => {
-//     if (currentCount < counter) {
-//       currentCount++;
-//       getElemnt(`#counter-${index}`).textContent = currentCount;
-//     } else {
-//       clearInterval(intervalId);
-//     }
-//   }, animationSpeed);
-// };
 
 const fetchSearchResults = async (searchState) => {
   const { q, mediaType, year } = searchState;
@@ -469,17 +388,7 @@ const fetchSearchResults = async (searchState) => {
 const renderSearchPage = () => {
   const hero = createHtmlElement(
     "section",
-    "search-hero   position-relative py-5 mb-5",
-    "",
-    {
-      style: `
-      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                  url('https://images.unsplash.com/photo-1464802686167-b939a6910659?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') 
-                  no-repeat center center/cover;
-      min-height: 300px;
-      margin-top:70px
-    `,
-    }
+    "search-hero   position-relative py-5 mb-5"
   );
 
   const container = createHtmlElement(
@@ -613,11 +522,10 @@ const renderSearchPage = () => {
 
   const loadMoreBtn = createHtmlElement(
     "button",
-    "btn btn-outline-primary",
+    "btn loadMoreBtn btn-outline-primary",
     "",
     {
       id: "loadMoreBtn",
-      style: "display: none;",
     }
   );
   loadMoreBtn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i> Load More`;
@@ -808,9 +716,7 @@ const mediaCard = (item) => {
 
   const card = createHtmlElement(
     "div",
-    "card card-hover-effect bg-dark text-light h-100 shadow border-secondary",
-    "",
-    { style: "position: relative;" }
+    "card media-card card-hover-effect bg-dark text-light h-100 shadow border-secondary"
   );
 
   const imgWrapper = createHtmlElement(
@@ -867,9 +773,7 @@ const mediaCard = (item) => {
     year
   );
 
-  const dropdownWrapper = createHtmlElement("div", "dropdown", "", {
-    style: "position: static;",
-  });
+  const dropdownWrapper = createHtmlElement("div", "dropdown dropdownWrapper");
 
   const dropdownBtn = createHtmlElement(
     "button",
@@ -888,25 +792,45 @@ const mediaCard = (item) => {
 
   const dropdownMenu = createHtmlElement(
     "ul",
-    "dropdown-menu dropdown-menu-dark dropdown-menu-end",
-    "",
-    {
-      "aria-label": "dropdownMenuButton",
-      style: "position: absolute; z-index: 9999;",
-    }
+    "dropdown-menu dropdown-menu-dark dropdown-menu-end"
   );
 
   const viewItem = createHtmlElement("li");
-  let isFav = true;
+  const isFav = getFavorites().some((f) => f.id === id);
   const viewLink = createHtmlElement("a", "dropdown-item", "", {
     href: `#/detail/${id}`,
   });
   viewLink.innerHTML = `<i class="fas fa-eye me-2"></i>View Details`;
 
   const favItem = createHtmlElement("li");
-  favItem.innerHTML = `<a class="dropdown-item favoriteBtn" href="#" data-id="${id}" data-title="${title}" data-thumb="${thumb}" data-type="${type}" data-desc="${desc}"><i class="${
-    isFav ? "fas" : "far"
-  } fa-star me-2"></i>${isFav ? "Remove Favorite" : "Add Favorite"}</a>`;
+
+  const favLink = createHtmlElement("a", "dropdown-item", "", {
+    href: "#",
+  });
+  favLink.innerHTML = `<i class="${isFav ? "fas" : "far"} fa-star me-2"></i>${
+    isFav ? "Remove Favorite" : "Add Favorite"
+  }`;
+
+  favLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    let favs = getFavorites();
+    const alreadyFav = favs.some((f) => f.id === id);
+
+    if (alreadyFav) {
+      favs = favs.filter((f) => f.id !== id);
+      favLink.innerHTML = `<i class="far fa-star me-2"></i> Add Favorite`;
+      showToast("Removed from favorites", "info");
+    } else {
+      favs.push(itemObj);
+      favLink.innerHTML = `<i class="fas fa-star me-2"></i> Remove Favorite`;
+      showToast("Added to favorites", "success");
+    }
+
+    localStorage.setItem("favorites", JSON.stringify(favs));
+  });
+
+  favItem.appendChild(favLink);
+
   const albumRow = createHtmlElement(
     "div",
     "d-flex gap-2 align-items-center mt-3"
@@ -943,6 +867,7 @@ const mediaCard = (item) => {
   }
 
   albumSelect.addEventListener("change", (e) => {
+    const albums = getAlbums();
     const selectedIndex = e.target.value;
     const selectedAlbum = albums[selectedIndex];
 
@@ -974,6 +899,124 @@ const mediaCard = (item) => {
   return cardCol;
 };
 
+function renderFavorites() {
+  const main = document.querySelector("main");
+  main.innerHTML = "";
+
+  const heroSection = createHtmlElement(
+    "div",
+    "bg-primary  heroSection text-white  text-center py-5 rounded-4 shadow-sm "
+  );
+
+  const heroTitle = createHtmlElement(
+    "h1",
+    "display-4 fw-bold mb-2",
+    "⭐ Favorites Library"
+  );
+
+  const heroSub = createHtmlElement(
+    "p",
+    "lead opacity-75",
+    "Explore your saved NASA images and videos."
+  );
+
+  customAppendChild(heroSection, heroTitle, heroSub);
+  const listWrapper = createHtmlElement("div", "row g-4", "", {
+    id: "favoritesList",
+  });
+
+  customAppendChild(main, heroSection, listWrapper);
+
+  const favs = getFavorites();
+  if (!favs.length) {
+    const emptyMsg = createHtmlElement(
+      "div",
+      "col-12 text-center text-secondary fs-5",
+      "🚫 No favorites yet."
+    );
+    listWrapper.appendChild(emptyMsg);
+    return;
+  }
+
+  favs.forEach((fav) => {
+    const col = createHtmlElement("div", "col-12 col-sm-6 col-md-4");
+    const card = createHtmlElement(
+      "div",
+      "card bg-gradient bg-dark text-light h-100 border-0 shadow-lg rounded-4 overflow-hidden"
+    );
+
+    const img = createHtmlElement("img", "card-img-top object-fit-cover", "", {
+      src: fav.thumb,
+      alt: fav.title,
+      loading: "lazy",
+    });
+
+    const cardBody = createHtmlElement(
+      "div",
+      "card-body d-flex flex-column p-4"
+    );
+    const titleEl = createHtmlElement(
+      "h5",
+      "card-title text-primary fw-bold mb-2",
+      fav.title
+    );
+    const descEl = createHtmlElement(
+      "p",
+      "card-text small text-light opacity-75 mb-3",
+      fav.desc
+    );
+
+    const badgeRow = createHtmlElement("div", "mb-3");
+    const badge = createHtmlElement(
+      "span",
+      "badge rounded-pill bg-info text-dark px-3 py-2",
+      fav.type
+    );
+
+    const btnGroup = createHtmlElement("div", "d-flex gap-2 mt-auto");
+
+    const viewBtn = createHtmlElement(
+      "button",
+      "btn btn-outline-info w-50 fw-semibold",
+      " View",
+      {},
+      {
+        click: () =>
+          (window.location.hash = `#/detail/${encodeURIComponent(fav.id)}`),
+      }
+    );
+
+    const removeBtn = createHtmlElement(
+      "button",
+      "btn btn-outline-danger w-50 fw-semibold",
+      " Remove",
+      {
+        "data-id": fav.id,
+      },
+      {
+        click: () => {
+          showConfirmDialog({
+            message: `Are you sure you want to remove "${fav.title}" from your favorites?`,
+            onConfirm: () => {
+              let favs = getFavorites();
+              favs = favs.filter((f) => f.id !== fav.id);
+              localStorage.setItem("favorites", JSON.stringify(favs));
+              renderFavorites();
+            },
+          });
+        },
+      }
+    );
+
+    customAppendChild(badgeRow, badge);
+    customAppendChild(btnGroup, viewBtn, removeBtn);
+    customAppendChild(cardBody, titleEl, descEl, badgeRow, btnGroup);
+    customAppendChild(card, img, cardBody);
+    customAppendChild(col, card);
+    customAppendChild(listWrapper, col);
+  });
+}
+
 function renderAlbums() {
   const main = document.querySelector("main");
 
@@ -997,11 +1040,7 @@ const renderDetailPage = (id) => {
 
   const spinner = createHtmlElement(
     "div",
-    "d-flex justify-content-center align-items-center ",
-    "",
-    {
-      style: "height: 100vh;",
-    }
+    "d-flex justify-content-center spinner align-items-center "
   );
   spinner.innerHTML = `
     <div class="spinner-border text-primary" role="status">
@@ -1011,7 +1050,6 @@ const renderDetailPage = (id) => {
 
   const mediaContainer = createHtmlElement("div", "position-relative ", "", {
     id: "mediaContainer",
-    style: "min-height: 500px; background: #111; margin-top:10px;",
   });
   mediaContainer.appendChild(spinner);
 
@@ -1138,8 +1176,29 @@ const fetchDetailContent = async (id) => {
       document.getElementById("detailType").textContent = type;
       document.getElementById("detailDate").textContent = date;
       document.getElementById("detailCenter").textContent = center;
-      const videoUrl = getVideoUrl(item);
-      console.log("Video URL:", videoUrl);
+
+      const isFav = getFavorites().some((f) => f.id === id);
+
+      const favoriteBtn = document.getElementById("favoriteBtn");
+      favoriteBtn.innerHTML = isFav
+        ? '<i class="fas fa-star me-2"></i> Favorited'
+        : '<i class="far fa-star me-2"></i> Favorite';
+
+      favoriteBtn.onclick = () => {
+        let favs = getFavorites();
+        const alreadyFav = favs.some((f) => f.id === id);
+
+        if (alreadyFav) {
+          favs = favs.filter((f) => f.id !== id);
+          favoriteBtn.innerHTML = '<i class="far fa-star me-2"></i> Favorite';
+        } else {
+          favs.push({ id, title, thumb, type, desc });
+          favoriteBtn.innerHTML = '<i class="fas fa-star me-2"></i> Favorited';
+        }
+
+        localStorage.setItem("favorites", JSON.stringify(favs));
+      };
+
       const mediaContainer = document.getElementById("mediaContainer");
       if (type === "video") {
         mediaContainer.innerHTML = `
@@ -1180,6 +1239,45 @@ const getVideoUrl = (item) => {
   return `https://images-assets.nasa.gov/video/${id}/${id}~orig.mp4`;
 };
 
+const getFavorites = () => {
+  return JSON.parse(localStorage.getItem("favorites") || "[]");
+};
+
+const renderCallToActionSection = () => {
+  const section = createHtmlElement(
+    "section",
+    "container-fluid py-5 mb-5 ActionSection position-relative overflow-hidden"
+  );
+
+  const container = createHtmlElement("div", "container text-center py-5");
+
+  const heading = createHtmlElement(
+    "h2",
+    "display-5 fw-bold text-white mb-4",
+    "Ready to Explore the Universe?"
+  );
+
+  const paragraph = createHtmlElement(
+    "p",
+    "lead text-light mb-5",
+    "Join millions of space enthusiasts discovering the wonders of our cosmos."
+  );
+
+  const launchBtn = createHtmlElement(
+    "a",
+    "btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg",
+    ``,
+    {
+      href: "#/search",
+    }
+  );
+  launchBtn.innerHTML = '<i class="fas fa-rocket me-2"></i> Launch Explorer';
+
+  customAppendChild(container, heading, paragraph, launchBtn);
+  customAppendChild(section, container);
+  return section;
+};
+
 const renderRoute = () => {
   const main = document.querySelector("main");
   const hash = window.location.hash.replace("#", "") || "/";
@@ -1196,6 +1294,10 @@ const renderRoute = () => {
   switch (hash) {
     case "/search":
       renderSearchPage();
+      break;
+
+    case "/favorites":
+      renderFavorites();
       break;
 
     case "/albums":
