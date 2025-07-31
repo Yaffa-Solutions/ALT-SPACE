@@ -379,16 +379,24 @@ const mediaCardElement = (item, albumIndex) => {
     {},
     {
       click: () => {
-        let albums = getAlbums();
-        albums[albumIndex].items = albums[albumIndex].items.filter(
-          (i) => i.id !== item.id
-        );
-        localStorage.setItem("albums", JSON.stringify(albums));
+        showConfirmDialog({
+          message: "Are you sure you want to remove this item from the album?",
+          onConfirm: () => {
+            let albums = getAlbums();
+            albums[albumIndex].items = albums[albumIndex].items.filter(
+              (i) => i.id !== item.id
+            );
+            localStorage.setItem("albums", JSON.stringify(albums));
 
-        renderAlbumMedia(albumIndex);
-        renderAlbumsGrid();
+            renderAlbumMedia(albumIndex);
+            renderAlbumsGrid();
 
-        showToast("Item removed from album", "warning");
+            showToast("Item removed from album", "warning");
+          },
+          onCancel: () => {
+            showToast("Cancelled", "info");
+          },
+        });
       },
     }
   );
@@ -410,6 +418,8 @@ const deleteAlbum = (index) => {
   albums.splice(index, 1);
   localStorage.setItem("albums", JSON.stringify(albums));
   renderAlbumsGrid();
+  window.location.reload();
+
   showToast("Album deleted", "danger");
 };
 

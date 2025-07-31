@@ -30,8 +30,7 @@ const customAppendChild = (parent, ...children) => {
   children.forEach((child) => parent.appendChild(child));
 };
 
-const getElemnt=(elem)=> document.querySelector(elem);
-
+const getElemnt = (elem) => document.querySelector(elem);
 
 const fetchDataWithXHR = (url, onSuccess, onError, method) => {
   const xhr = new XMLHttpRequest();
@@ -82,7 +81,6 @@ const showToast = (message, type = "info") => {
   customAppendChild(toastContent, toastBody, closeButton);
   toast.appendChild(toastContent);
   document.body.appendChild(toast);
-
   setTimeout(() => {
     toast.classList.remove("show");
     setTimeout(() => toast.remove(), 300);
