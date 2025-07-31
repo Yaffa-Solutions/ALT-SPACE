@@ -275,7 +275,7 @@ const renderFactCard = (data) => {
 
   const media =
     data.media_type === 'image'
-      ? createHtmlElement('img', 'card-img-top', '', {
+      ? createHtmlElement('img', 'card-img-top fact-img', '', {
           src: data.url,
           alt: data.title,
         })
