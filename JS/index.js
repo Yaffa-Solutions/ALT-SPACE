@@ -9,7 +9,7 @@ const renderHome = () => {
   fetchDataWithXHR(
     News_API,
     (data) => {
-      renderListNews(data);
+      renderListNews(data.items);
       main.appendChild(renderCallToActionSection());
     },
     (error) => {
@@ -320,7 +320,7 @@ const renderListNews = (lst) => {
   customAppendChild(sectionHeader, sectionTitle);
   customAppendChild(sectionHeader);
 
-  lst.items.slice(0, countLst).forEach((i) => {
+  lst.slice(0, countLst).forEach((i) => {
     const col = createHtmlElement("div", "col-12 col-md-4  mb-4 d-flex");
     const card = createHtmlElement(
       "div",
